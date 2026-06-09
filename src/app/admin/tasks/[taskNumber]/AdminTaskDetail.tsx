@@ -107,8 +107,32 @@ export function AdminTaskDetail({ initialTask }: { initialTask: Task }) {
       </div>
 
       <div>
-        <p className="mb-3 text-sm font-medium text-zinc-400">原图</p>
-        <div className="relative aspect-video max-w-2xl overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900">
+        <div className="mb-3 flex max-w-2xl flex-wrap items-center justify-between gap-3">
+          <p className="text-sm font-medium text-zinc-400">原图</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <a
+              href={task.input_image}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg border border-white/10 px-3 py-1.5 text-xs font-medium text-zinc-300 transition hover:border-white/20 hover:text-white"
+            >
+              打开原图
+            </a>
+            <a
+              href={`/api/admin/tasks/${task.task_number}/input-image/download`}
+              className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-black transition hover:bg-zinc-200"
+            >
+              下载原图
+            </a>
+          </div>
+        </div>
+        <a
+          href={task.input_image}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="relative block aspect-video max-w-2xl overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900 transition hover:border-white/20"
+          aria-label="打开原图"
+        >
           <Image
             src={task.input_image}
             alt="原图"
@@ -116,7 +140,7 @@ export function AdminTaskDetail({ initialTask }: { initialTask: Task }) {
             className="object-contain"
             sizes="(max-width: 768px) 100vw, 672px"
           />
-        </div>
+        </a>
       </div>
 
       {task.result_image && (
