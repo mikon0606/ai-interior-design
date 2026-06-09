@@ -76,22 +76,19 @@ export function SubmitTaskForm() {
     <>
       <section
         id="submit"
-        className="scroll-mt-16 px-4 pb-4 pt-20 sm:px-6 sm:pt-24"
+        className="scroll-mt-16 px-4 pb-10 pt-20 sm:px-6 sm:pb-16 sm:pt-24"
       >
         <div className="mx-auto max-w-5xl">
-          <div className="mb-7 max-w-2xl sm:mb-9">
-            <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-[#7a8a6a]">
-              For Interior Designers
-            </p>
-            <h1 className="text-balance text-3xl font-semibold leading-tight text-[#181816] sm:text-5xl">
-              快速生成客户提案效果图
-            </h1>
-            <p className="mt-4 max-w-lg text-sm leading-6 text-neutral-600 sm:text-base">
-              上传空间照片和设计要求，后台人工处理后回传结果。
-            </p>
+          <div className="mb-4 flex items-end justify-between gap-4 border-b border-black/[0.08] pb-4">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-[#181816] sm:text-3xl">
+                客户提案图
+              </h1>
+            </div>
+            <p className="hidden text-sm text-neutral-500 sm:block">人工回传</p>
           </div>
 
-          <div className="grid gap-4 rounded-[28px] border border-black/[0.08] bg-white p-4 shadow-[0_24px_80px_rgba(30,30,25,0.08)] sm:p-5 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="grid gap-3 border-b border-black/[0.08] pb-4 lg:grid-cols-[1.06fr_0.94fr]">
             <PhotoUpload
               file={file}
               previewUrl={previewUrl}
@@ -100,10 +97,10 @@ export function SubmitTaskForm() {
               errorMessage={fieldErrors.photo}
             />
 
-            <div className="flex flex-col rounded-3xl bg-[#f7f7f4] p-4 sm:p-5">
+            <div className="flex flex-col">
               <label
                 htmlFor="prompt"
-                className="mb-3 block text-sm font-semibold text-[#181816]"
+                className="mb-3 block text-sm font-medium text-[#181816]"
               >
                 设计需求
               </label>
@@ -119,7 +116,7 @@ export function SubmitTaskForm() {
                 }}
                 placeholder={PROMPT_PLACEHOLDER}
                 aria-invalid={Boolean(fieldErrors.prompt)}
-                className={`min-h-[260px] flex-1 resize-y rounded-2xl border bg-white px-4 py-4 text-sm leading-relaxed text-[#181816] placeholder:text-neutral-400 focus:outline-none focus:ring-2 sm:text-base ${
+                className={`min-h-[260px] flex-1 resize-y rounded-xl border bg-white px-4 py-4 text-sm leading-relaxed text-[#181816] placeholder:text-neutral-400 focus:outline-none focus:ring-2 sm:min-h-[360px] sm:text-base ${
                   fieldErrors.prompt
                     ? "border-red-400 ring-red-100 focus:border-red-400 focus:ring-red-100"
                     : "border-black/10 focus:border-[#7a8a6a] focus:ring-[#dce5d3]"
@@ -132,19 +129,15 @@ export function SubmitTaskForm() {
               )}
             </div>
           </div>
-        </div>
-      </section>
 
-      <section className="px-4 pb-16 pt-4 sm:px-6 sm:pb-20">
-        <div className="mx-auto max-w-5xl">
           <button
             type="button"
             disabled={isSubmitting}
             onClick={handleSubmit}
-            className={`flex h-14 w-full items-center justify-center gap-2 rounded-2xl text-base font-semibold transition-all sm:h-16 sm:text-lg ${
+            className={`mt-4 flex h-14 w-full items-center justify-center gap-2 rounded-xl text-base font-semibold transition-all ${
               isSubmitting
                 ? "cursor-wait bg-neutral-300 text-neutral-500"
-                : "bg-[#181816] text-white shadow-[0_16px_36px_rgba(24,24,22,0.18)] hover:bg-[#2b2b28] active:scale-[0.99]"
+                : "bg-[#181816] text-white hover:bg-[#2b2b28] active:scale-[0.99]"
             }`}
           >
             {isSubmitting && (

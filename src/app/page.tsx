@@ -8,8 +8,8 @@ export default function Home() {
       <main>
         <SubmitTaskForm />
       </main>
-      <footer className="border-t border-black/[0.06] px-4 py-8 text-center text-xs text-neutral-500 sm:px-6 sm:text-sm">
-        <p>© {new Date().getFullYear()} AI装修大师</p>
+      <footer className="border-t border-black/[0.06] px-4 py-6 text-center text-xs text-neutral-500 sm:px-6">
+        <p>AI装修大师 © {new Date().getFullYear()}</p>
         <a
           href="/admin"
           className="mt-2 inline-block text-neutral-500 transition hover:text-neutral-900"

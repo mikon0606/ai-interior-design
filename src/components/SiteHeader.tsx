@@ -8,7 +8,7 @@ export function SiteHeader({ tone = "light" }: { tone?: "light" | "dark" }) {
       className={`fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl ${
         isDark
           ? "border-white/[0.06] bg-[#050505]/80"
-          : "border-black/[0.06] bg-[#f6f6f3]/85"
+          : "border-black/[0.06] bg-[#f6f6f3]/90"
       }`}
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">

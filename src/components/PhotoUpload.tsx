@@ -59,7 +59,7 @@ export function PhotoUpload({
 
   return (
     <div className="w-full">
-      <h3 className="mb-3 text-sm font-semibold text-[#181816]">
+      <h3 className="mb-3 text-sm font-medium text-[#181816]">
         上传房间照片
       </h3>
 
@@ -77,7 +77,7 @@ export function PhotoUpload({
           }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={onDrop}
-          className={`flex min-h-[260px] cursor-pointer flex-col items-center justify-center rounded-3xl border border-dashed px-6 py-12 transition-colors sm:min-h-[360px] ${errorBorder} ${
+          className={`flex min-h-[260px] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed px-6 py-12 transition-colors sm:min-h-[360px] ${errorBorder} ${
             isDragging
               ? "border-[#7a8a6a] bg-[#edf3e8]"
               : hasError
@@ -95,7 +95,7 @@ export function PhotoUpload({
         </div>
       ) : (
         <div
-          className={`overflow-hidden rounded-3xl border bg-[#f7f7f4] ${errorBorder || "border-black/10"}`}
+          className={`overflow-hidden rounded-xl border bg-[#f7f7f4] ${errorBorder || "border-black/10"}`}
         >
           <div className="relative aspect-[16/10] w-full">
             <Image
@@ -114,14 +114,14 @@ export function PhotoUpload({
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
-                className="rounded-lg border border-black/10 px-3 py-1.5 text-sm text-neutral-700 transition hover:bg-black/[0.04]"
+                className="rounded-md border border-black/10 px-3 py-1.5 text-sm text-neutral-700 transition hover:bg-black/[0.04]"
               >
                 更换
               </button>
               <button
                 type="button"
                 onClick={clearPhoto}
-                className="rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-600 transition hover:bg-red-50"
+                className="rounded-md border border-red-200 px-3 py-1.5 text-sm text-red-600 transition hover:bg-red-50"
               >
                 移除
               </button>
