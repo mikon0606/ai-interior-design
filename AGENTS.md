@@ -22,7 +22,9 @@
 
 - 默认使用中文
 - 每次新线程开始开发前，先阅读 `docs/FOUNDER_CONTEXT.md`
+- 每次新线程开始开发前，先阅读 `docs/CURRENT_STATE.md`
 - 开发决策必须参考 `docs/FOUNDER_CONTEXT.md` 中的创始人背景和阶段目标
+- 继续开发前，必须结合 `docs/CURRENT_STATE.md` 判断当前进度、未完成事项和最近上下文
 - 修改代码前先说明方案
 - 不删除已有功能
 - 不修改环境变量
