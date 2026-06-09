@@ -5,10 +5,10 @@ export function SiteHeader({ tone = "light" }: { tone?: "light" | "dark" }) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl ${
+      className={`fixed inset-x-0 top-0 z-50 backdrop-blur-xl ${
         isDark
-          ? "border-white/[0.06] bg-[#050505]/80"
-          : "border-black/[0.06] bg-[#f6f6f3]/90"
+          ? "bg-[#050505]/80"
+          : "bg-[#f6f6f3]/88"
       }`}
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">

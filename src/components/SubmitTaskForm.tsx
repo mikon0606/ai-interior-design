@@ -79,68 +79,73 @@ export function SubmitTaskForm() {
         className="scroll-mt-16 px-4 pb-10 pt-20 sm:px-6 sm:pb-16 sm:pt-24"
       >
         <div className="mx-auto max-w-5xl">
-          <div className="grid gap-4 border-y border-black/[0.08] py-4 lg:grid-cols-[1.05fr_0.95fr]">
-            <PhotoUpload
-              file={file}
-              previewUrl={previewUrl}
-              onFileChange={handleFileChange}
-              hasError={Boolean(fieldErrors.photo)}
-              errorMessage={fieldErrors.photo}
-            />
-
-            <div className="flex flex-col">
-              <label
-                htmlFor="prompt"
-                className="mb-3 block text-xs font-medium uppercase tracking-[0.18em] text-neutral-500"
-              >
-                设计需求
-              </label>
-              <textarea
-                id="prompt"
-                rows={10}
-                value={prompt}
-                onChange={(e) => {
-                  setPrompt(e.target.value);
-                  if (e.target.value.trim()) {
-                    setFieldErrors((prev) => ({ ...prev, prompt: undefined }));
-                  }
-                }}
-                placeholder={PROMPT_PLACEHOLDER}
-                aria-invalid={Boolean(fieldErrors.prompt)}
-                className={`min-h-[260px] flex-1 resize-y rounded-lg border bg-white px-4 py-4 text-sm leading-relaxed text-[#181816] placeholder:text-neutral-400 focus:outline-none focus:ring-2 sm:min-h-[360px] sm:text-base ${
-                  fieldErrors.prompt
-                    ? "border-red-400 ring-red-100 focus:border-red-400 focus:ring-red-100"
-                    : "border-black/10 focus:border-[#7a8a6a] focus:ring-[#dce5d3]"
-                }`}
+          <div className="rounded-[20px] bg-white/80 p-3 shadow-[0_24px_80px_rgba(24,24,22,0.07)] ring-1 ring-black/[0.04] backdrop-blur sm:p-4">
+            <div className="grid gap-3 lg:grid-cols-[1.05fr_0.95fr]">
+              <PhotoUpload
+                file={file}
+                previewUrl={previewUrl}
+                onFileChange={handleFileChange}
+                hasError={Boolean(fieldErrors.photo)}
+                errorMessage={fieldErrors.photo}
               />
-              {fieldErrors.prompt && (
-                <p className="mt-2 text-sm text-red-600" role="alert">
-                  {fieldErrors.prompt}
-                </p>
-              )}
-            </div>
-          </div>
 
-          <button
-            type="button"
-            disabled={isSubmitting}
-            onClick={handleSubmit}
-            className={`mt-4 flex h-[52px] w-full items-center justify-center gap-2 rounded-lg text-sm font-semibold transition-all sm:h-14 ${
-              isSubmitting
-                ? "cursor-wait bg-neutral-300 text-neutral-500"
-                : "bg-[#181816] text-white hover:bg-[#2b2b28] active:scale-[0.99]"
-            }`}
-          >
-            {isSubmitting && (
-              <span className="h-5 w-5 animate-spin rounded-full border-2 border-neutral-400 border-t-white" />
+              <div className="flex flex-col">
+                <label
+                  htmlFor="prompt"
+                  className="mb-3 block text-sm font-medium text-[#181816]"
+                >
+                  设计需求
+                </label>
+                <textarea
+                  id="prompt"
+                  rows={10}
+                  value={prompt}
+                  onChange={(e) => {
+                    setPrompt(e.target.value);
+                    if (e.target.value.trim()) {
+                      setFieldErrors((prev) => ({
+                        ...prev,
+                        prompt: undefined,
+                      }));
+                    }
+                  }}
+                  placeholder={PROMPT_PLACEHOLDER}
+                  aria-invalid={Boolean(fieldErrors.prompt)}
+                  className={`min-h-[260px] flex-1 resize-y rounded-2xl border px-4 py-4 text-sm leading-relaxed text-[#181816] placeholder:text-neutral-400 focus:outline-none focus:ring-2 sm:min-h-[360px] sm:text-base ${
+                    fieldErrors.prompt
+                      ? "border-red-400 bg-red-50 ring-red-100 focus:border-red-400 focus:ring-red-100"
+                      : "border-black/[0.06] bg-[#fbfbf8] focus:border-[#7a8a6a] focus:bg-white focus:ring-[#dce5d3]"
+                  }`}
+                />
+                {fieldErrors.prompt && (
+                  <p className="mt-2 text-sm text-red-600" role="alert">
+                    {fieldErrors.prompt}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              disabled={isSubmitting}
+              onClick={handleSubmit}
+              className={`mt-3 flex h-[52px] w-full items-center justify-center gap-2 rounded-2xl text-sm font-semibold transition-all sm:h-14 ${
+                isSubmitting
+                  ? "cursor-wait bg-neutral-200 text-neutral-500"
+                  : "bg-[#181816] text-white shadow-[0_14px_32px_rgba(24,24,22,0.16)] hover:bg-[#2b2b28] active:scale-[0.99]"
+              }`}
+            >
+              {isSubmitting && (
+                <span className="h-5 w-5 animate-spin rounded-full border-2 border-neutral-400 border-t-white" />
+              )}
+              {isSubmitting ? "提交中…" : "提交任务"}
+            </button>
+            {fieldErrors.submit && (
+              <p className="mt-3 text-center text-sm text-red-600" role="alert">
+                {fieldErrors.submit}
+              </p>
             )}
-            {isSubmitting ? "提交中…" : "提交任务"}
-          </button>
-          {fieldErrors.submit && (
-            <p className="mt-3 text-center text-sm text-red-600" role="alert">
-              {fieldErrors.submit}
-            </p>
-          )}
+          </div>
         </div>
       </section>
     </>
