@@ -59,7 +59,7 @@ export function PhotoUpload({
 
   return (
     <div className="w-full">
-      <h3 className="mb-3 text-sm font-medium text-[#181816]">
+      <h3 className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-neutral-500">
         上传房间照片
       </h3>
 
@@ -77,25 +77,25 @@ export function PhotoUpload({
           }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={onDrop}
-          className={`flex min-h-[260px] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed px-6 py-12 transition-colors sm:min-h-[360px] ${errorBorder} ${
+          className={`flex min-h-[260px] cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed px-6 py-12 transition-colors sm:min-h-[360px] ${errorBorder} ${
             isDragging
-              ? "border-[#7a8a6a] bg-[#edf3e8]"
+              ? "border-[#7a8a6a] bg-white"
               : hasError
                 ? "border-red-400 bg-red-50"
-                : "border-black/10 bg-[#f7f7f4] hover:border-[#7a8a6a]/60 hover:bg-[#f1f4ee]"
+                : "border-black/10 bg-white hover:border-[#7a8a6a]/70"
           }`}
         >
           <UploadIcon />
-          <p className="mt-4 text-center text-sm font-medium text-[#181816] sm:text-base">
+          <p className="mt-4 text-center text-sm font-medium text-[#181816]">
             点击上传照片
           </p>
-          <p className="mt-1.5 text-center text-xs text-neutral-500 sm:text-sm">
+          <p className="mt-1.5 text-center text-xs text-neutral-500">
             JPG · PNG · WEBP，最大 10MB
           </p>
         </div>
       ) : (
         <div
-          className={`overflow-hidden rounded-xl border bg-[#f7f7f4] ${errorBorder || "border-black/10"}`}
+          className={`overflow-hidden rounded-lg border bg-white ${errorBorder || "border-black/10"}`}
         >
           <div className="relative aspect-[16/10] w-full">
             <Image
@@ -150,7 +150,7 @@ export function PhotoUpload({
 function UploadIcon() {
   return (
     <svg
-      className="h-10 w-10 text-[#7a8a6a] sm:h-12 sm:w-12"
+      className="h-9 w-9 text-[#7a8a6a] sm:h-10 sm:w-10"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
