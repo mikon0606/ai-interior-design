@@ -12,12 +12,6 @@ export function SiteHeader() {
         </Link>
         <nav className="flex items-center gap-4 sm:gap-6">
           <a
-            href="#cases"
-            className="text-sm text-zinc-400 transition hover:text-white"
-          >
-            案例
-          </a>
-          <a
             href="#submit"
             className="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-black transition hover:bg-zinc-200"
           >
