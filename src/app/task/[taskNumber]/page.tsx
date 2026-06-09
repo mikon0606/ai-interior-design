@@ -20,7 +20,7 @@ export default async function TaskPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white">
-      <SiteHeader />
+      <SiteHeader tone="dark" />
       <main className="px-4 pb-20 pt-20 sm:px-6 sm:pt-24">
         <div className="mx-auto max-w-4xl">
           <Link

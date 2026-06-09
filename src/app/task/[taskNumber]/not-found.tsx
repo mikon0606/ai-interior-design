@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function TaskNotFound() {
   return (
     <div className="min-h-screen bg-[#050505] text-white">
-      <SiteHeader />
+      <SiteHeader tone="dark" />
       <main className="flex min-h-[60vh] flex-col items-center justify-center px-4 pt-20">
         <h1 className="text-2xl font-semibold">任务不存在</h1>
         <p className="mt-2 text-zinc-500">请检查任务编号是否正确</p>

@@ -78,17 +78,20 @@ export function SubmitTaskForm() {
         id="submit"
         className="scroll-mt-16 px-4 pb-4 pt-20 sm:px-6 sm:pt-24"
       >
-        <div className="mx-auto max-w-4xl">
-          <div className="mb-8 text-center sm:mb-10">
-            <h1 className="text-balance text-2xl font-semibold leading-tight text-white sm:text-4xl">
-              上传房间照片，提交装修任务
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-7 max-w-2xl sm:mb-9">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-[#7a8a6a]">
+              For Interior Designers
+            </p>
+            <h1 className="text-balance text-3xl font-semibold leading-tight text-[#181816] sm:text-5xl">
+              快速生成客户提案效果图
             </h1>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-zinc-400 sm:text-base">
-              上传照片并输入需求，我们将人工为您生成装修效果图
+            <p className="mt-4 max-w-lg text-sm leading-6 text-neutral-600 sm:text-base">
+              上传空间照片和设计要求，后台人工处理后回传结果。
             </p>
           </div>
 
-          <div className="space-y-8 rounded-3xl border border-white/[0.08] bg-white/[0.02] p-5 sm:space-y-10 sm:p-8">
+          <div className="grid gap-4 rounded-[28px] border border-black/[0.08] bg-white p-4 shadow-[0_24px_80px_rgba(30,30,25,0.08)] sm:p-5 lg:grid-cols-[1.05fr_0.95fr]">
             <PhotoUpload
               file={file}
               previewUrl={previewUrl}
@@ -97,16 +100,16 @@ export function SubmitTaskForm() {
               errorMessage={fieldErrors.photo}
             />
 
-            <div>
+            <div className="flex flex-col rounded-3xl bg-[#f7f7f4] p-4 sm:p-5">
               <label
                 htmlFor="prompt"
-                className="mb-4 block text-lg font-medium text-white sm:text-xl"
+                className="mb-3 block text-sm font-semibold text-[#181816]"
               >
-                请输入你的装修需求
+                设计需求
               </label>
               <textarea
                 id="prompt"
-                rows={6}
+                rows={10}
                 value={prompt}
                 onChange={(e) => {
                   setPrompt(e.target.value);
@@ -116,14 +119,14 @@ export function SubmitTaskForm() {
                 }}
                 placeholder={PROMPT_PLACEHOLDER}
                 aria-invalid={Boolean(fieldErrors.prompt)}
-                className={`w-full resize-y rounded-2xl border bg-black/40 px-4 py-4 text-sm leading-relaxed text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 sm:text-base ${
+                className={`min-h-[260px] flex-1 resize-y rounded-2xl border bg-white px-4 py-4 text-sm leading-relaxed text-[#181816] placeholder:text-neutral-400 focus:outline-none focus:ring-2 sm:text-base ${
                   fieldErrors.prompt
-                    ? "border-red-500/60 ring-red-500/20 focus:border-red-500/60 focus:ring-red-500/20"
-                    : "border-white/10 focus:border-violet-500/50 focus:ring-violet-500/20"
+                    ? "border-red-400 ring-red-100 focus:border-red-400 focus:ring-red-100"
+                    : "border-black/10 focus:border-[#7a8a6a] focus:ring-[#dce5d3]"
                 }`}
               />
               {fieldErrors.prompt && (
-                <p className="mt-2 text-sm text-red-400" role="alert">
+                <p className="mt-2 text-sm text-red-600" role="alert">
                   {fieldErrors.prompt}
                 </p>
               )}
@@ -132,25 +135,25 @@ export function SubmitTaskForm() {
         </div>
       </section>
 
-      <section className="px-4 pb-16 sm:px-6 sm:pb-20">
-        <div className="mx-auto max-w-4xl">
+      <section className="px-4 pb-16 pt-4 sm:px-6 sm:pb-20">
+        <div className="mx-auto max-w-5xl">
           <button
             type="button"
             disabled={isSubmitting}
             onClick={handleSubmit}
-            className={`flex h-16 w-full items-center justify-center gap-2 rounded-2xl text-lg font-semibold transition-all sm:h-[72px] sm:text-xl ${
+            className={`flex h-14 w-full items-center justify-center gap-2 rounded-2xl text-base font-semibold transition-all sm:h-16 sm:text-lg ${
               isSubmitting
-                ? "cursor-wait bg-zinc-800 text-zinc-400"
-                : "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-900/40 hover:from-violet-500 hover:to-indigo-500 active:scale-[0.99]"
+                ? "cursor-wait bg-neutral-300 text-neutral-500"
+                : "bg-[#181816] text-white shadow-[0_16px_36px_rgba(24,24,22,0.18)] hover:bg-[#2b2b28] active:scale-[0.99]"
             }`}
           >
             {isSubmitting && (
-              <span className="h-5 w-5 animate-spin rounded-full border-2 border-zinc-600 border-t-white" />
+              <span className="h-5 w-5 animate-spin rounded-full border-2 border-neutral-400 border-t-white" />
             )}
             {isSubmitting ? "提交中…" : "提交任务"}
           </button>
           {fieldErrors.submit && (
-            <p className="mt-3 text-center text-sm text-red-400" role="alert">
+            <p className="mt-3 text-center text-sm text-red-600" role="alert">
               {fieldErrors.submit}
             </p>
           )}

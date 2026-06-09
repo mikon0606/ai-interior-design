@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050505;
-  --foreground: #fafafa;
-  --muted: #a1a1aa;
-  --border: rgba(255, 255, 255, 0.08);
-  --card: rgba(255, 255, 255, 0.03);
-  --accent: #8b5cf6;
-  --accent-hover: #a78bfa;
+  --background: #f6f6f3;
+  --foreground: #181816;
+  --muted: #6f6f68;
+  --border: rgba(24, 24, 22, 0.08);
+  --card: #ffffff;
+  --accent: #7a8a6a;
+  --accent-hover: #657557;
 }
 
 @theme inline {
@@ -39,8 +39,8 @@ body {
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.35);
-  color: #fff;
+  background: rgba(122, 138, 106, 0.28);
+  color: #181816;
 }
 
 @keyframes progress {

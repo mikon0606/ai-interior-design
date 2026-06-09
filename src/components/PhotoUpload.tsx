@@ -54,12 +54,12 @@ export function PhotoUpload({
   };
 
   const errorBorder = hasError
-    ? "border-red-500/60 ring-2 ring-red-500/20"
+    ? "border-red-400 ring-2 ring-red-100"
     : "";
 
   return (
     <div className="w-full">
-      <h3 className="mb-4 text-lg font-medium text-white sm:text-xl">
+      <h3 className="mb-3 text-sm font-semibold text-[#181816]">
         上传房间照片
       </h3>
 
@@ -77,25 +77,25 @@ export function PhotoUpload({
           }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={onDrop}
-          className={`flex min-h-[220px] cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed px-6 py-12 transition-colors sm:min-h-[280px] ${errorBorder} ${
+          className={`flex min-h-[260px] cursor-pointer flex-col items-center justify-center rounded-3xl border border-dashed px-6 py-12 transition-colors sm:min-h-[360px] ${errorBorder} ${
             isDragging
-              ? "border-violet-500 bg-violet-500/10"
+              ? "border-[#7a8a6a] bg-[#edf3e8]"
               : hasError
-                ? "border-red-500/60 bg-red-500/5"
-                : "border-white/15 bg-white/[0.02] hover:border-white/25 hover:bg-white/[0.04]"
+                ? "border-red-400 bg-red-50"
+                : "border-black/10 bg-[#f7f7f4] hover:border-[#7a8a6a]/60 hover:bg-[#f1f4ee]"
           }`}
         >
           <UploadIcon />
-          <p className="mt-4 text-center text-sm font-medium text-zinc-300 sm:text-base">
-            点击或拖拽照片到此处
+          <p className="mt-4 text-center text-sm font-medium text-[#181816] sm:text-base">
+            点击上传照片
           </p>
-          <p className="mt-1.5 text-center text-xs text-zinc-500 sm:text-sm">
+          <p className="mt-1.5 text-center text-xs text-neutral-500 sm:text-sm">
             JPG · PNG · WEBP，最大 10MB
           </p>
         </div>
       ) : (
         <div
-          className={`overflow-hidden rounded-2xl border bg-zinc-900/50 ${errorBorder || "border-white/10"}`}
+          className={`overflow-hidden rounded-3xl border bg-[#f7f7f4] ${errorBorder || "border-black/10"}`}
         >
           <div className="relative aspect-[16/10] w-full">
             <Image
@@ -106,22 +106,22 @@ export function PhotoUpload({
               unoptimized
             />
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.06] px-4 py-3">
-            <p className="truncate text-sm text-zinc-400">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-black/[0.06] px-4 py-3">
+            <p className="truncate text-sm text-neutral-600">
               {file?.name ?? "已选择照片"}
             </p>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
-                className="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-zinc-300 transition hover:bg-white/5"
+                className="rounded-lg border border-black/10 px-3 py-1.5 text-sm text-neutral-700 transition hover:bg-black/[0.04]"
               >
                 更换
               </button>
               <button
                 type="button"
                 onClick={clearPhoto}
-                className="rounded-lg border border-red-500/30 px-3 py-1.5 text-sm text-red-400 transition hover:bg-red-500/10"
+                className="rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-600 transition hover:bg-red-50"
               >
                 移除
               </button>
@@ -131,7 +131,7 @@ export function PhotoUpload({
       )}
 
       {errorMessage && (
-        <p className="mt-2 text-sm text-red-400" role="alert">
+        <p className="mt-2 text-sm text-red-600" role="alert">
           {errorMessage}
         </p>
       )}
@@ -150,7 +150,7 @@ export function PhotoUpload({
 function UploadIcon() {
   return (
     <svg
-      className="h-10 w-10 text-zinc-500 sm:h-12 sm:w-12"
+      className="h-10 w-10 text-[#7a8a6a] sm:h-12 sm:w-12"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
