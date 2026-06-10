@@ -141,23 +141,31 @@ export function AdminTaskDetail({ initialTask }: { initialTask: Task }) {
       <div>
         <div className="mb-3 flex max-w-2xl flex-wrap items-center justify-between gap-3">
           <p className="text-sm font-medium text-zinc-400">原图</p>
-          <button
-            type="button"
-            onClick={handleInputImageSave}
-            disabled={isSavingInputImage}
-            className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-black transition hover:bg-zinc-200 disabled:cursor-wait disabled:bg-zinc-700 disabled:text-zinc-400"
-          >
-            {isSavingInputImage ? "保存中…" : "保存原图"}
-          </button>
+          {task.input_image && (
+            <button
+              type="button"
+              onClick={handleInputImageSave}
+              disabled={isSavingInputImage}
+              className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-black transition hover:bg-zinc-200 disabled:cursor-wait disabled:bg-zinc-700 disabled:text-zinc-400"
+            >
+              {isSavingInputImage ? "保存中…" : "保存原图"}
+            </button>
+          )}
         </div>
         <div className="relative aspect-video max-w-2xl overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900">
-          <Image
-            src={task.input_image}
-            alt="原图"
-            fill
-            className="object-contain"
-            sizes="(max-width: 768px) 100vw, 672px"
-          />
+          {task.input_image ? (
+            <Image
+              src={task.input_image}
+              alt="原图"
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, 672px"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center px-6 text-center text-sm text-zinc-500">
+              用户未上传图片，仅提交了文字需求
+            </div>
+          )}
         </div>
       </div>
 

@@ -37,6 +37,10 @@ export async function GET(_request: Request, context: RouteContext) {
     return NextResponse.json({ error: "任务不存在" }, { status: 404 });
   }
 
+  if (!task.input_image) {
+    return NextResponse.json({ error: "此任务没有上传原图" }, { status: 404 });
+  }
+
   const imageResponse = await fetch(task.input_image);
 
   if (!imageResponse.ok || !imageResponse.body) {

@@ -54,7 +54,7 @@ export function TaskDetailClient({ initialTask }: TaskDetailClientProps) {
       )}
 
       {task.status === "completed" && !task.result_image && (
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-6 text-center text-sm text-amber-200">
+        <div className="rounded-2xl bg-amber-50 p-6 text-center text-sm text-amber-800 ring-1 ring-amber-200">
           任务已标记完成，效果图正在准备中，请稍后刷新页面
         </div>
       )}

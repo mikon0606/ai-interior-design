@@ -54,11 +54,13 @@ export async function generateTaskNumber(): Promise<string> {
 
 export async function createTask(
   prompt: string,
-  imageFile: File,
+  imageFile?: File,
 ): Promise<Task> {
   const supabase = createServiceSupabase();
   const taskNumber = await generateTaskNumber();
-  const inputImage = await saveInputImage(taskNumber, imageFile);
+  const inputImage = imageFile
+    ? await saveInputImage(taskNumber, imageFile)
+    : "";
 
   const { data, error } = await supabase
     .from("tasks")

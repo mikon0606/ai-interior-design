@@ -16,28 +16,23 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!(image instanceof File) || image.size === 0) {
-      return NextResponse.json(
-        { error: "请上传房间照片" },
-        { status: 400 },
-      );
-    }
+    const hasImage = image instanceof File && image.size > 0;
 
-    if (!image.type.startsWith("image/")) {
+    if (hasImage && !image.type.startsWith("image/")) {
       return NextResponse.json(
         { error: "请上传有效的图片文件" },
         { status: 400 },
       );
     }
 
-    if (image.size > 10 * 1024 * 1024) {
+    if (hasImage && image.size > 10 * 1024 * 1024) {
       return NextResponse.json(
         { error: "图片大小不能超过 10MB" },
         { status: 400 },
       );
     }
 
-    const task = await createTask(prompt, image);
+    const task = await createTask(prompt, hasImage ? image : undefined);
 
     return NextResponse.json({ task }, { status: 201 });
   } catch (error) {

@@ -53,15 +53,16 @@ export function PhotoUpload({
     if (inputRef.current) inputRef.current.value = "";
   };
 
-  const errorBorder = hasError
-    ? "border-red-400 ring-2 ring-red-100"
-    : "";
+  const errorBorder = hasError ? "border-red-400 ring-2 ring-red-100" : "";
 
   return (
     <div className="w-full">
-      <h3 className="mb-3 text-sm font-medium text-[#181816]">
-        上传照片
-      </h3>
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <h3 className="text-sm font-medium text-[#181816]">
+          上传房间 / 户型图
+        </h3>
+        <span className="text-xs text-neutral-500">可选</span>
+      </div>
 
       {!previewUrl ? (
         <div
@@ -77,7 +78,7 @@ export function PhotoUpload({
           }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={onDrop}
-          className={`flex min-h-[260px] cursor-pointer flex-col items-center justify-center rounded-2xl border px-6 py-12 transition-all sm:min-h-[360px] ${errorBorder} ${
+          className={`flex min-h-[360px] cursor-pointer flex-col items-center justify-center rounded-xl border px-6 py-12 transition-all ${errorBorder} ${
             isDragging
               ? "border-[#7a8a6a] bg-white shadow-[inset_0_0_0_1px_rgba(122,138,106,0.22)]"
               : hasError
@@ -85,21 +86,21 @@ export function PhotoUpload({
                 : "border-black/[0.06] bg-[#fbfbf8] hover:border-[#7a8a6a]/60 hover:bg-white"
           }`}
         >
-          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#7a8a6a] shadow-[0_10px_30px_rgba(24,24,22,0.06)] ring-1 ring-black/[0.04]">
+          <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-white text-[#7a8a6a] shadow-[0_10px_30px_rgba(24,24,22,0.06)] ring-1 ring-black/[0.04]">
             <UploadIcon />
           </span>
           <p className="mt-4 text-center text-sm font-medium text-[#181816]">
-            点击上传照片
+            点击上传照片或户型图
           </p>
           <p className="mt-1.5 text-center text-xs text-neutral-500">
-            JPG · PNG · WEBP，最大 10MB
+            也可以只填写文字需求
           </p>
         </div>
       ) : (
         <div
-          className={`overflow-hidden rounded-2xl border bg-white ${errorBorder || "border-black/[0.06]"}`}
+          className={`overflow-hidden rounded-xl border bg-white ${errorBorder || "border-black/[0.06]"}`}
         >
-          <div className="relative aspect-[16/10] w-full">
+          <div className="relative aspect-[4/3] w-full bg-[#f1f1ed]">
             <Image
               src={previewUrl}
               alt="已上传的房间照片预览"
@@ -108,7 +109,7 @@ export function PhotoUpload({
               unoptimized
             />
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-black/[0.06] px-4 py-3">
             <p className="truncate text-sm text-neutral-600">
               {file?.name ?? "已选择照片"}
             </p>
@@ -116,14 +117,14 @@ export function PhotoUpload({
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
-                className="rounded-full bg-neutral-100 px-3 py-1.5 text-sm text-neutral-700 transition hover:bg-neutral-200"
+                className="rounded-lg bg-neutral-100 px-3 py-1.5 text-sm text-neutral-700 transition hover:bg-neutral-200"
               >
                 更换
               </button>
               <button
                 type="button"
                 onClick={clearPhoto}
-                className="rounded-full bg-red-50 px-3 py-1.5 text-sm text-red-600 transition hover:bg-red-100"
+                className="rounded-lg bg-red-50 px-3 py-1.5 text-sm text-red-600 transition hover:bg-red-100"
               >
                 移除
               </button>

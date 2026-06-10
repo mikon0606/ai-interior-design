@@ -10,9 +10,15 @@ export function TaskCompletedView({ task }: TaskCompletedViewProps) {
 
   return (
     <div className="space-y-6">
-      <div className="overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.02]">
-        <div className="grid grid-cols-1 md:grid-cols-2">
-          <ImagePanel label="原图" src={task.input_image} alt="原图" />
+      <div className="overflow-hidden rounded-2xl bg-white/82 shadow-[0_18px_60px_rgba(24,24,22,0.06)] ring-1 ring-black/[0.04]">
+        <div
+          className={`grid grid-cols-1 ${
+            task.input_image ? "md:grid-cols-2" : ""
+          }`}
+        >
+          {task.input_image && (
+            <ImagePanel label="原图" src={task.input_image} alt="原图" />
+          )}
           <ImagePanel
             label="效果图"
             src={resultUrl}
@@ -26,7 +32,7 @@ export function TaskCompletedView({ task }: TaskCompletedViewProps) {
         <a
           href={resultUrl}
           download={`${task.task_number}-效果图`}
-          className="inline-flex h-12 items-center justify-center rounded-xl bg-white px-8 text-sm font-semibold text-black transition hover:bg-zinc-200 sm:text-base"
+          className="inline-flex h-12 items-center justify-center rounded-xl bg-[#181816] px-8 text-sm font-semibold text-white transition hover:bg-[#2b2b28] sm:text-base"
         >
           下载效果图
         </a>
@@ -47,19 +53,19 @@ function ImagePanel({
   highlight?: boolean;
 }) {
   return (
-    <div className="border-b border-white/[0.06] md:border-b-0 md:border-r md:last:border-r-0">
-      <div className="flex items-center border-b border-white/[0.06] px-4 py-3">
+    <div className="border-b border-black/[0.06] md:border-b-0 md:border-r md:border-black/[0.06] md:last:border-r-0">
+      <div className="flex items-center px-4 py-3">
         <span
           className={`rounded-md px-2.5 py-1 text-xs font-medium ${
             highlight
-              ? "bg-violet-600/90 text-white"
-              : "bg-white/10 text-zinc-400"
+              ? "bg-[#181816] text-white"
+              : "bg-black/[0.06] text-neutral-600"
           }`}
         >
           {label}
         </span>
       </div>
-      <div className="relative aspect-[4/3] w-full bg-zinc-900 sm:aspect-[16/10]">
+      <div className="relative aspect-[4/3] w-full bg-[#f1f1ed] sm:aspect-[16/10]">
         <Image
           src={src}
           alt={alt}

@@ -44,15 +44,21 @@ export function AdminTasksTable({ initialTasks }: { initialTasks: Task[] }) {
                     {task.task_number}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="relative h-14 w-20 overflow-hidden rounded-lg bg-zinc-900">
-                      <Image
-                        src={task.input_image}
-                        alt=""
-                        fill
-                        className="object-cover"
-                        sizes="80px"
-                      />
-                    </div>
+                    {task.input_image ? (
+                      <div className="relative h-14 w-20 overflow-hidden rounded-lg bg-zinc-900">
+                        <Image
+                          src={task.input_image}
+                          alt=""
+                          fill
+                          className="object-cover"
+                          sizes="80px"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex h-14 w-20 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-xs text-zinc-500">
+                        无参考图
+                      </div>
+                    )}
                   </td>
                   <td className="max-w-[200px] px-4 py-3">
                     <p className="line-clamp-2 text-zinc-400">{task.prompt}</p>
