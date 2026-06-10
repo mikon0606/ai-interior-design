@@ -19,8 +19,21 @@ export function AdminTaskDetail({ initialTask }: { initialTask: Task }) {
   const [isSavingStatus, setIsSavingStatus] = useState(false);
   const [isSavingInputImage, setIsSavingInputImage] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [hasCopiedPrompt, setHasCopiedPrompt] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const handlePromptCopy = async () => {
+    setError(null);
+
+    try {
+      await navigator.clipboard.writeText(task.prompt);
+      setHasCopiedPrompt(true);
+      window.setTimeout(() => setHasCopiedPrompt(false), 1600);
+    } catch {
+      setError("复制失败，请手动选择文字复制");
+    }
+  };
 
   const handleStatusSave = async () => {
     setIsSavingStatus(true);
@@ -132,7 +145,16 @@ export function AdminTaskDetail({ initialTask }: { initialTask: Task }) {
       </div>
 
       <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 sm:p-6">
-        <p className="mb-2 text-sm text-zinc-500">装修需求</p>
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <p className="text-sm text-zinc-500">装修需求</p>
+          <button
+            type="button"
+            onClick={handlePromptCopy}
+            className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-black transition hover:bg-zinc-200"
+          >
+            {hasCopiedPrompt ? "已复制" : "复制需求"}
+          </button>
+        </div>
         <p className="whitespace-pre-wrap text-sm leading-relaxed text-zinc-300">
           {task.prompt}
         </p>

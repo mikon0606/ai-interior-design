@@ -1,5 +1,6 @@
+import { AdminNewTaskWatcher } from "@/app/admin/AdminNewTaskWatcher";
 import { AdminTaskDetail } from "@/app/admin/tasks/[taskNumber]/AdminTaskDetail";
-import { getTaskByNumber } from "@/lib/tasks";
+import { getTaskByNumber, listTasks } from "@/lib/tasks";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -11,14 +12,17 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminTaskPage({ params }: PageProps) {
   const { taskNumber } = await params;
-  const task = await getTaskByNumber(taskNumber);
+  const [task, tasks] = await Promise.all([getTaskByNumber(taskNumber), listTasks()]);
 
   if (!task) {
     notFound();
   }
 
+  const latestTaskNumber = tasks[0]?.task_number ?? null;
+
   return (
     <div className="min-h-screen bg-[#050505] text-white">
+      <AdminNewTaskWatcher initialLatestTaskNumber={latestTaskNumber} />
       <header className="border-b border-white/[0.06] bg-[#050505]/90">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:h-16 sm:px-6">
           <Link
