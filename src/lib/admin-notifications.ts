@@ -36,6 +36,7 @@ export async function notifyAdminNewTask(task: Task) {
       subject: `新设计任务 ${task.task_number}`,
       text,
       taskNumber: task.task_number,
+      siteUrl,
     });
     return;
   }
@@ -65,23 +66,30 @@ async function notifyWithFormSubmit({
   subject,
   text,
   taskNumber,
+  siteUrl,
 }: {
   to: string;
   subject: string;
   text: string;
   taskNumber: string;
+  siteUrl?: string;
 }) {
   const formData = new FormData();
   formData.append("_subject", subject);
   formData.append("_captcha", "false");
   formData.append("_template", "table");
+  formData.append("提醒类型", "新任务提醒");
   formData.append("任务编号", taskNumber);
   formData.append("通知内容", text);
+
+  const origin = siteUrl ?? "https://ai-interior-design.zh-cn.edgeone.run";
 
   const res = await fetch(`${FORMSUBMIT_URL}/${encodeURIComponent(to)}`, {
     method: "POST",
     headers: {
       Accept: "application/json",
+      Origin: origin,
+      Referer: `${origin}/`,
     },
     body: formData,
   });
