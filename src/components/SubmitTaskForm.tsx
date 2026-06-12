@@ -1,14 +1,17 @@
 "use client";
 
 import { PhotoUpload } from "@/components/PhotoUpload";
+import { TaskCompletedView } from "@/components/TaskCompletedView";
 import type { Task } from "@/lib/task-types";
 import { PROMPT_PLACEHOLDER } from "@/lib/task-types";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type FieldErrors = {
   prompt?: string;
   submit?: string;
 };
+
+const POLL_INTERVAL_MS = 4000;
 
 export function SubmitTaskForm() {
   const [file, setFile] = useState<File | null>(null);
@@ -69,6 +72,30 @@ export function SubmitTaskForm() {
       setIsSubmitting(false);
     }
   };
+
+  const fetchSubmittedTask = useCallback(async () => {
+    if (!submittedTask || submittedTask.status === "completed") return;
+
+    try {
+      const res = await fetch(`/api/tasks/${submittedTask.task_number}`, {
+        cache: "no-store",
+      });
+      if (!res.ok) return;
+
+      const data = await res.json();
+      setSubmittedTask(data.task);
+    } catch {
+      // 保持当前等待状态，下一轮继续尝试。
+    }
+  }, [submittedTask]);
+
+  useEffect(() => {
+    if (!submittedTask || submittedTask.status === "completed") return;
+
+    fetchSubmittedTask();
+    const timer = window.setInterval(fetchSubmittedTask, POLL_INTERVAL_MS);
+    return () => window.clearInterval(timer);
+  }, [submittedTask, fetchSubmittedTask]);
 
   return (
     <>
@@ -141,7 +168,15 @@ export function SubmitTaskForm() {
                 {fieldErrors.submit}
               </p>
             )}
-            {submittedTask && <InlineWaitingIndicator task={submittedTask} />}
+            {submittedTask &&
+              (submittedTask.status === "completed" &&
+              submittedTask.result_image ? (
+                <div className="mt-4">
+                  <TaskCompletedView task={submittedTask} />
+                </div>
+              ) : (
+                <InlineWaitingIndicator task={submittedTask} />
+              ))}
           </div>
         </div>
       </section>

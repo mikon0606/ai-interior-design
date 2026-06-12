@@ -17,7 +17,9 @@ export function TaskDetailClient({ initialTask }: TaskDetailClientProps) {
 
   const fetchTask = useCallback(async () => {
     try {
-      const res = await fetch(`/api/tasks/${task.task_number}`);
+      const res = await fetch(`/api/tasks/${task.task_number}`, {
+        cache: "no-store",
+      });
       if (!res.ok) return;
       const data = await res.json();
       setTask(data.task);
@@ -33,6 +35,7 @@ export function TaskDetailClient({ initialTask }: TaskDetailClientProps) {
   useEffect(() => {
     if (task.status === "completed") return;
 
+    fetchTask();
     const timer = setInterval(fetchTask, POLL_INTERVAL_MS);
     return () => clearInterval(timer);
   }, [task.status, fetchTask]);
