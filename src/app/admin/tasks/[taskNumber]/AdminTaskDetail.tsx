@@ -1,6 +1,7 @@
 "use client";
 
 import { TaskStatusBadge } from "@/components/TaskStatusBadge";
+import { compressImageFile } from "@/lib/client-image";
 import {
   TASK_STATUSES,
   TASK_STATUS_LABELS,
@@ -103,8 +104,9 @@ export function AdminTaskDetail({ initialTask }: { initialTask: Task }) {
     setMessage(null);
 
     try {
+      const uploadFile = await compressImageFile(file);
       const formData = new FormData();
-      formData.append("image", file);
+      formData.append("image", uploadFile);
 
       const res = await fetch(
         `/api/admin/tasks/${task.task_number}/result`,

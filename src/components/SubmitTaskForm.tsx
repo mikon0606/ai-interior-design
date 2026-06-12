@@ -2,6 +2,7 @@
 
 import { PhotoUpload } from "@/components/PhotoUpload";
 import { TaskCompletedView } from "@/components/TaskCompletedView";
+import { compressImageFile } from "@/lib/client-image";
 import type { Task } from "@/lib/task-types";
 import { PROMPT_PLACEHOLDER } from "@/lib/task-types";
 import { useCallback, useEffect, useState } from "react";
@@ -50,7 +51,7 @@ export function SubmitTaskForm() {
       const formData = new FormData();
       formData.append("prompt", prompt.trim());
       if (file) {
-        formData.append("image", file);
+        formData.append("image", await compressImageFile(file));
       }
 
       const res = await fetch("/api/tasks", {
