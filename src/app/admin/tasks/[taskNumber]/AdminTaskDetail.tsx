@@ -133,48 +133,48 @@ export function AdminTaskDetail({ initialTask }: { initialTask: Task }) {
     <div className="space-y-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-sm text-zinc-500">任务编号</p>
+          <p className="text-sm text-neutral-500">任务编号</p>
           <h1 className="mt-1 font-mono text-2xl font-semibold">
             {task.task_number}
           </h1>
-          <p className="mt-2 text-sm text-zinc-500">
+          <p className="mt-2 text-sm text-neutral-500">
             提交于 {formatDateTime(task.created_at)}
           </p>
         </div>
         <TaskStatusBadge status={task.status} />
       </div>
 
-      <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 sm:p-6">
+      <div className="rounded-[20px] bg-white/80 p-5 shadow-[0_18px_60px_rgba(24,24,22,0.06)] ring-1 ring-black/[0.04] sm:p-6">
         <div className="mb-2 flex items-center justify-between gap-3">
-          <p className="text-sm text-zinc-500">装修需求</p>
+          <p className="text-sm text-neutral-500">装修需求</p>
           <button
             type="button"
             onClick={handlePromptCopy}
-            className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-black transition hover:bg-zinc-200"
+            className="rounded-lg bg-[#181816] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#2b2b28]"
           >
             {hasCopiedPrompt ? "已复制" : "复制需求"}
           </button>
         </div>
-        <p className="whitespace-pre-wrap text-sm leading-relaxed text-zinc-300">
+        <p className="whitespace-pre-wrap text-sm leading-relaxed text-neutral-700">
           {task.prompt}
         </p>
       </div>
 
       <div>
         <div className="mb-3 flex max-w-2xl flex-wrap items-center justify-between gap-3">
-          <p className="text-sm font-medium text-zinc-400">原图</p>
+          <p className="text-sm font-medium text-neutral-600">原图</p>
           {task.input_image && (
             <button
               type="button"
               onClick={handleInputImageSave}
               disabled={isSavingInputImage}
-              className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-black transition hover:bg-zinc-200 disabled:cursor-wait disabled:bg-zinc-700 disabled:text-zinc-400"
+              className="rounded-lg bg-[#181816] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#2b2b28] disabled:cursor-wait disabled:bg-neutral-200 disabled:text-neutral-500"
             >
               {isSavingInputImage ? "保存中…" : "保存原图"}
             </button>
           )}
         </div>
-        <div className="relative aspect-video max-w-2xl overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900">
+        <div className="relative aspect-video max-w-2xl overflow-hidden rounded-2xl bg-white ring-1 ring-black/[0.04]">
           {task.input_image ? (
             <Image
               src={task.input_image}
@@ -184,7 +184,7 @@ export function AdminTaskDetail({ initialTask }: { initialTask: Task }) {
               sizes="(max-width: 768px) 100vw, 672px"
             />
           ) : (
-            <div className="flex h-full items-center justify-center px-6 text-center text-sm text-zinc-500">
+            <div className="flex h-full items-center justify-center px-6 text-center text-sm text-neutral-500">
               用户未上传图片，仅提交了文字需求
             </div>
           )}
@@ -193,8 +193,8 @@ export function AdminTaskDetail({ initialTask }: { initialTask: Task }) {
 
       {task.result_image && (
         <div>
-          <p className="mb-3 text-sm font-medium text-zinc-400">当前效果图</p>
-          <div className="relative aspect-video max-w-2xl overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900">
+          <p className="mb-3 text-sm font-medium text-neutral-600">当前效果图</p>
+          <div className="relative aspect-video max-w-2xl overflow-hidden rounded-2xl bg-white ring-1 ring-black/[0.04]">
             <Image
               src={task.result_image}
               alt="效果图"
@@ -206,13 +206,13 @@ export function AdminTaskDetail({ initialTask }: { initialTask: Task }) {
         </div>
       )}
 
-      <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 sm:p-6">
+      <div className="rounded-[20px] bg-white/80 p-5 shadow-[0_18px_60px_rgba(24,24,22,0.06)] ring-1 ring-black/[0.04] sm:p-6">
         <h2 className="text-lg font-medium">修改状态</h2>
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value as TaskStatus)}
-            className="rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-white focus:border-violet-500/50 focus:outline-none"
+            className="rounded-xl border border-black/[0.08] bg-white px-4 py-2.5 text-sm text-[#181816] focus:border-[#7a8a6a] focus:outline-none"
           >
             {TASK_STATUSES.map((s) => (
               <option key={s} value={s}>
@@ -224,19 +224,19 @@ export function AdminTaskDetail({ initialTask }: { initialTask: Task }) {
             type="button"
             onClick={handleStatusSave}
             disabled={isSavingStatus}
-            className="rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-violet-500 disabled:opacity-50"
+            className="rounded-xl bg-[#181816] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#2b2b28] disabled:opacity-50"
           >
             {isSavingStatus ? "保存中…" : "保存状态"}
           </button>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 sm:p-6">
+      <div className="rounded-[20px] bg-white/80 p-5 shadow-[0_18px_60px_rgba(24,24,22,0.06)] ring-1 ring-black/[0.04] sm:p-6">
         <h2 className="text-lg font-medium">上传效果图</h2>
-        <p className="mt-2 text-sm text-zinc-500">
+        <p className="mt-2 text-sm text-neutral-500">
           上传后将自动关联到此任务，并将状态设为「已完成」
         </p>
-        <label className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-black/20 px-6 py-10 transition hover:border-violet-500/40 hover:bg-violet-500/5">
+        <label className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-black/[0.12] bg-[#fbfbf8] px-6 py-10 transition hover:border-[#7a8a6a]/60 hover:bg-white">
           <input
             type="file"
             accept="image/*"
@@ -244,19 +244,19 @@ export function AdminTaskDetail({ initialTask }: { initialTask: Task }) {
             disabled={isUploading}
             onChange={handleResultUpload}
           />
-          <span className="text-sm text-zinc-400">
+          <span className="text-sm text-neutral-500">
             {isUploading ? "上传中…" : "点击选择效果图文件"}
           </span>
         </label>
       </div>
 
       {message && (
-        <p className="rounded-xl bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+        <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
           {message}
         </p>
       )}
       {error && (
-        <p className="rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-300">
+        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
           {error}
         </p>
       )}

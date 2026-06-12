@@ -1,3 +1,4 @@
+import { notifyAdminNewTask } from "@/lib/admin-notifications";
 import { createTask } from "@/lib/tasks";
 import { NextResponse } from "next/server";
 
@@ -33,6 +34,9 @@ export async function POST(request: Request) {
     }
 
     const task = await createTask(prompt, hasImage ? image : undefined);
+    await notifyAdminNewTask(task).catch((error) => {
+      console.error("Notify admin new task error:", error);
+    });
 
     return NextResponse.json({ task }, { status: 201 });
   } catch (error) {
