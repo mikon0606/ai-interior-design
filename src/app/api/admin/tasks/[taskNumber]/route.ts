@@ -1,3 +1,4 @@
+import { getAdminClaims } from "@/lib/admin-auth";
 import { getTaskByNumber, updateTaskStatus } from "@/lib/tasks";
 import { TASK_STATUSES, type TaskStatus } from "@/lib/task-types";
 import { NextResponse } from "next/server";
@@ -9,6 +10,12 @@ type RouteContext = {
 };
 
 export async function GET(_request: Request, context: RouteContext) {
+  const claims = await getAdminClaims();
+
+  if (!claims) {
+    return NextResponse.json({ error: "请先登录后台" }, { status: 401 });
+  }
+
   const { taskNumber } = await context.params;
   const task = await getTaskByNumber(taskNumber);
 
@@ -20,6 +27,12 @@ export async function GET(_request: Request, context: RouteContext) {
 }
 
 export async function PATCH(request: Request, context: RouteContext) {
+  const claims = await getAdminClaims();
+
+  if (!claims) {
+    return NextResponse.json({ error: "请先登录后台" }, { status: 401 });
+  }
+
   const { taskNumber } = await context.params;
 
   try {

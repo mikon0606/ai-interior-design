@@ -1,11 +1,19 @@
 import { AdminNewTaskWatcher } from "@/app/admin/AdminNewTaskWatcher";
 import { AdminTasksTable } from "@/app/admin/AdminTasksTable";
+import { getAdminClaims } from "@/lib/admin-auth";
 import { listTasks } from "@/lib/tasks";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
+  const claims = await getAdminClaims();
+
+  if (!claims) {
+    redirect("/login?next=/admin");
+  }
+
   const tasks = await listTasks();
   const latestTaskNumber = tasks[0]?.task_number ?? null;
 
@@ -20,12 +28,22 @@ export default async function AdminPage() {
               人工审核模式
             </span>
           </div>
-          <Link
-            href="/"
-            className="text-sm text-neutral-500 transition hover:text-[#181816]"
-          >
-            返回用户端
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/"
+              className="text-sm text-neutral-500 transition hover:text-[#181816]"
+            >
+              返回用户端
+            </Link>
+            <form action="/auth/signout" method="post">
+              <button
+                type="submit"
+                className="text-sm text-neutral-500 transition hover:text-[#181816]"
+              >
+                退出登录
+              </button>
+            </form>
+          </div>
         </div>
       </header>
 

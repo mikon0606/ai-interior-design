@@ -1,3 +1,4 @@
+import { getAdminClaims } from "@/lib/admin-auth";
 import { uploadTaskResult } from "@/lib/tasks";
 import { NextResponse } from "next/server";
 
@@ -8,6 +9,12 @@ type RouteContext = {
 };
 
 export async function POST(request: Request, context: RouteContext) {
+  const claims = await getAdminClaims();
+
+  if (!claims) {
+    return NextResponse.json({ error: "请先登录后台" }, { status: 401 });
+  }
+
   const { taskNumber } = await context.params;
 
   try {
