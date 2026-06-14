@@ -1,28 +1,38 @@
 import { LoginForm } from "@/app/login/LoginForm";
-import { createAuthSupabase } from "@/lib/supabase/auth-server";
+import { getAuthClaims } from "@/lib/auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 type LoginPageProps = {
   searchParams: Promise<{
     error?: string;
+    message?: string;
     next?: string;
   }>;
 };
 
 export const dynamic = "force-dynamic";
 
-export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const supabase = await createAuthSupabase();
-  const { data } = await supabase.auth.getClaims();
-
-  if (data?.claims) {
-    redirect("/admin");
+function getSafeFormNext(next?: string) {
+  if (!next || !next.startsWith("/") || next.startsWith("//")) {
+    return "/my/tasks";
   }
 
+  return next;
+}
+
+function getLoggedInRedirect(nextPath: string) {
+  return nextPath.startsWith("/admin") ? "/my/tasks" : nextPath;
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
   const params = await searchParams;
-  const nextPath =
-    params.next && params.next.startsWith("/") ? params.next : "/admin";
+  const nextPath = getSafeFormNext(params.next);
+  const claims = await getAuthClaims();
+
+  if (claims) {
+    redirect(getLoggedInRedirect(nextPath));
+  }
 
   return (
     <div className="min-h-screen bg-[#f6f6f3] px-4 py-12 text-[#181816] sm:px-6">
@@ -36,14 +46,18 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               AI装修大师
             </Link>
             <h1 className="mt-8 text-2xl font-semibold tracking-tight">
-              登录后台
+              登录 / 注册
             </h1>
             <p className="mt-2 text-sm leading-6 text-neutral-500">
-              用 Supabase Auth 管理员账号进入任务处理后台。
+              登录后可以提交新任务，并在我的任务里持续查看处理进度和回传效果图。
             </p>
           </div>
 
-          <LoginForm error={params.error} nextPath={nextPath} />
+          <LoginForm
+            error={params.error}
+            message={params.message}
+            nextPath={nextPath}
+          />
         </div>
       </main>
     </div>

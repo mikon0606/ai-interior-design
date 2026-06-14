@@ -1,8 +1,10 @@
 import { TaskDetailClient } from "@/app/task/[taskNumber]/TaskDetailClient";
 import { SiteHeader } from "@/components/SiteHeader";
+import { getAdminClaims } from "@/lib/admin-auth";
+import { getAuthClaims } from "@/lib/auth";
 import { getTaskByNumber } from "@/lib/tasks";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 type PageProps = {
   params: Promise<{ taskNumber: string }>;
@@ -18,16 +20,25 @@ export default async function TaskPage({ params }: PageProps) {
     notFound();
   }
 
+  const [claims, adminClaims] = await Promise.all([
+    getAuthClaims(),
+    getAdminClaims(),
+  ]);
+
+  if (task.user_id && claims?.sub !== task.user_id && !adminClaims) {
+    redirect("/login?next=" + encodeURIComponent("/task/" + taskNumber));
+  }
+
   return (
     <div className="min-h-screen bg-[#f6f6f3] text-[#181816]">
-      <SiteHeader />
+      <SiteHeader currentUserEmail={claims?.email} />
       <main className="px-4 pb-20 pt-20 sm:px-6 sm:pt-24">
         <div className="mx-auto max-w-4xl">
           <Link
-            href="/"
+            href="/my/tasks"
             className="mb-6 inline-flex text-sm text-neutral-500 transition hover:text-[#181816]"
           >
-            ← 返回提交新任务
+            ← 返回我的任务
           </Link>
 
           <div className="mb-8">

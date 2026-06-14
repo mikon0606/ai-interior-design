@@ -3,6 +3,7 @@ export type TaskStatus = "pending" | "processing" | "completed";
 export interface Task {
   id: number;
   task_number: string;
+  user_id: string | null;
   prompt: string;
   input_image: string;
   result_image: string | null;

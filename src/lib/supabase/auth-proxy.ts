@@ -6,8 +6,18 @@ const ADMIN_PATHS = ["/admin", "/api/admin"];
 
 function isAdminPath(pathname: string) {
   return ADMIN_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`),
+    (path) => pathname === path || pathname.startsWith(path + "/"),
   );
+}
+
+function getSafeLoginRedirect(request: NextRequest) {
+  const next = request.nextUrl.searchParams.get("next");
+
+  if (!next || !next.startsWith("/") || next.startsWith("//")) {
+    return "/my/tasks";
+  }
+
+  return next.startsWith("/admin") ? "/my/tasks" : next;
 }
 
 export async function updateAuthSession(request: NextRequest) {
@@ -50,10 +60,10 @@ export async function updateAuthSession(request: NextRequest) {
   }
 
   if (pathname === "/login" && isLoggedIn) {
-    const adminUrl = request.nextUrl.clone();
-    adminUrl.pathname = "/admin";
-    adminUrl.search = "";
-    return NextResponse.redirect(adminUrl);
+    const destinationUrl = request.nextUrl.clone();
+    destinationUrl.pathname = getSafeLoginRedirect(request);
+    destinationUrl.search = "";
+    return NextResponse.redirect(destinationUrl);
   }
 
   return response;

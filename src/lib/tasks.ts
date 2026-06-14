@@ -9,6 +9,7 @@ const TASK_NUMBER_START = 10001;
 type TaskRow = {
   id: number;
   task_number: string;
+  user_id: string | null;
   prompt: string;
   input_image: string;
   result_image: string | null;
@@ -21,6 +22,7 @@ function rowToTask(row: TaskRow): Task {
   return {
     id: row.id,
     task_number: row.task_number,
+    user_id: row.user_id,
     prompt: row.prompt,
     input_image: row.input_image,
     result_image: row.result_image,
@@ -40,20 +42,21 @@ export async function generateTaskNumber(): Promise<string> {
     .maybeSingle();
 
   if (error) {
-    throw new Error(`获取任务编号失败: ${error.message}`);
+    throw new Error("获取任务编号失败: " + error.message);
   }
 
   if (!data) {
-    return `A${TASK_NUMBER_START}`;
+    return "A" + TASK_NUMBER_START;
   }
 
   const current = parseInt(data.task_number.replace(/^A/, ""), 10);
   const next = Number.isNaN(current) ? TASK_NUMBER_START : current + 1;
-  return `A${next}`;
+  return "A" + next;
 }
 
 export async function createTask(
   prompt: string,
+  userId: string,
   imageFile?: File,
 ): Promise<Task> {
   const supabase = createServiceSupabase();
@@ -66,6 +69,7 @@ export async function createTask(
     .from("tasks")
     .insert({
       task_number: taskNumber,
+      user_id: userId,
       prompt: prompt.trim(),
       input_image: inputImage,
       result_image: null,
@@ -92,7 +96,7 @@ export async function getTaskByNumber(
     .maybeSingle();
 
   if (error) {
-    throw new Error(`查询任务失败: ${error.message}`);
+    throw new Error("查询任务失败: " + error.message);
   }
 
   return data ? rowToTask(data as TaskRow) : null;
@@ -106,7 +110,22 @@ export async function listTasks(): Promise<Task[]> {
     .order("created_at", { ascending: false });
 
   if (error) {
-    throw new Error(`获取任务列表失败: ${error.message}`);
+    throw new Error("获取任务列表失败: " + error.message);
+  }
+
+  return (data ?? []).map((row) => rowToTask(row as TaskRow));
+}
+
+export async function listTasksByUser(userId: string): Promise<Task[]> {
+  const supabase = createServiceSupabase();
+  const { data, error } = await supabase
+    .from("tasks")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw new Error("获取我的任务失败: " + error.message);
   }
 
   return (data ?? []).map((row) => rowToTask(row as TaskRow));
@@ -125,7 +144,7 @@ export async function updateTaskStatus(
     .maybeSingle();
 
   if (error) {
-    throw new Error(`更新状态失败: ${error.message}`);
+    throw new Error("更新状态失败: " + error.message);
   }
 
   return data ? rowToTask(data as TaskRow) : null;
@@ -152,7 +171,7 @@ export async function uploadTaskResult(
     .maybeSingle();
 
   if (error) {
-    throw new Error(`更新效果图失败: ${error.message}`);
+    throw new Error("更新效果图失败: " + error.message);
   }
 
   return data ? rowToTask(data as TaskRow) : null;

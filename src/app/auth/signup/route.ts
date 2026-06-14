@@ -9,7 +9,7 @@ function getSafeNext(next: FormDataEntryValue | null) {
     return "/my/tasks";
   }
 
-  return next;
+  return next.startsWith("/admin") ? "/my/tasks" : next;
 }
 
 export async function POST(request: NextRequest) {
@@ -24,6 +24,11 @@ export async function POST(request: NextRequest) {
 
   if (typeof email !== "string" || typeof password !== "string") {
     loginUrl.searchParams.set("error", "请输入邮箱和密码");
+    return NextResponse.redirect(loginUrl, { status: 303 });
+  }
+
+  if (password.length < 6) {
+    loginUrl.searchParams.set("error", "密码至少需要 6 位");
     return NextResponse.redirect(loginUrl, { status: 303 });
   }
 
@@ -54,15 +59,24 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const origin = request.nextUrl.origin;
+  const { data, error } = await supabase.auth.signUp({
     email: email.trim(),
     password,
+    options: {
+      emailRedirectTo: new URL("/auth/confirm?next=" + encodeURIComponent(destination), origin).toString(),
+    },
   });
 
   if (error) {
-    loginUrl.searchParams.set("error", "邮箱或密码不正确");
+    loginUrl.searchParams.set("error", error.message || "注册失败，请稍后重试");
     return NextResponse.redirect(loginUrl, { status: 303 });
   }
 
-  return response;
+  if (data.session) {
+    return response;
+  }
+
+  loginUrl.searchParams.set("message", "注册成功，请检查邮箱完成确认");
+  return NextResponse.redirect(loginUrl, { status: 303 });
 }

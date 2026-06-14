@@ -9,5 +9,7 @@ export async function POST(request: NextRequest) {
   await supabase.auth.signOut();
 
   revalidatePath("/", "layout");
-  return NextResponse.redirect(new URL("/login", request.url), { status: 303 });
+  const loginUrl = new URL("/login", request.url);
+  loginUrl.searchParams.set("message", "已退出登录");
+  return NextResponse.redirect(loginUrl, { status: 303 });
 }
