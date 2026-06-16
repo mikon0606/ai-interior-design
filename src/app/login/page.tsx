@@ -36,8 +36,8 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <div className="min-h-screen bg-[#f6f6f3] px-4 py-12 text-[#181816] sm:px-6">
-      <main className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-md items-center">
-        <div className="w-full rounded-[20px] bg-white/85 p-6 shadow-[0_24px_80px_rgba(24,24,22,0.07)] ring-1 ring-black/[0.04] sm:p-7">
+      <main className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-sm items-center">
+        <div className="w-full rounded-[18px] bg-white/88 p-6 shadow-[0_24px_80px_rgba(24,24,22,0.07)] ring-1 ring-black/[0.04] sm:p-7">
           <div className="mb-6">
             <Link
               href="/"
@@ -48,9 +48,6 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             <h1 className="mt-8 text-2xl font-semibold tracking-tight">
               登录 / 注册
             </h1>
-            <p className="mt-2 text-sm leading-6 text-neutral-500">
-              登录后可以提交新任务，并在我的任务里持续查看处理进度和回传效果图。
-            </p>
           </div>
 
           <LoginForm

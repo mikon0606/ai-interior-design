@@ -17,7 +17,38 @@ type SubmitTaskFormProps = {
   userEmail?: string;
 };
 
+type SubmitDraft = {
+  prompt: string;
+  image?: {
+    dataUrl: string;
+    name: string;
+    type: string;
+    lastModified: number;
+  };
+};
+
 const POLL_INTERVAL_MS = 4000;
+const DRAFT_STORAGE_KEY = "ai-interior-submit-draft";
+
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error("图片暂存失败"));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function dataUrlToFile(
+  dataUrl: string,
+  name: string,
+  type: string,
+  lastModified: number,
+) {
+  const res = await fetch(dataUrl);
+  const blob = await res.blob();
+  return new File([blob], name, { type, lastModified });
+}
 
 export function SubmitTaskForm({ userEmail }: SubmitTaskFormProps) {
   const [file, setFile] = useState<File | null>(null);
@@ -36,6 +67,78 @@ export function SubmitTaskForm({ userEmail }: SubmitTaskFormProps) {
     [previewUrl],
   );
 
+  useEffect(() => {
+    let isMounted = true;
+
+    async function restoreDraft() {
+      const raw = window.sessionStorage.getItem(DRAFT_STORAGE_KEY);
+      if (!raw) return;
+
+      try {
+        const draft = JSON.parse(raw) as SubmitDraft;
+        if (!isMounted) return;
+
+        setPrompt(draft.prompt ?? "");
+
+        if (draft.image?.dataUrl) {
+          const restoredFile = await dataUrlToFile(
+            draft.image.dataUrl,
+            draft.image.name,
+            draft.image.type,
+            draft.image.lastModified,
+          );
+          if (!isMounted) return;
+          const url = URL.createObjectURL(restoredFile);
+          setFile(restoredFile);
+          setPreviewUrl(url);
+        }
+
+        window.sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+      } catch {
+        window.sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+      }
+    }
+
+    restoreDraft();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
+
+  const redirectToLoginWithDraft = async () => {
+    setIsSubmitting(true);
+
+    try {
+      const draft: SubmitDraft = { prompt: prompt.trim() };
+
+      if (file) {
+        const compressedFile = await compressImageFile(file);
+        draft.image = {
+          dataUrl: await fileToDataUrl(compressedFile),
+          name: compressedFile.name,
+          type: compressedFile.type,
+          lastModified: compressedFile.lastModified,
+        };
+      }
+
+      window.sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+    } catch {
+      window.sessionStorage.setItem(
+        DRAFT_STORAGE_KEY,
+        JSON.stringify({ prompt: prompt.trim() }),
+      );
+    }
+
+    window.location.href = "/login?next=/";
+  };
+
   const handleSubmit = async () => {
     const errors: FieldErrors = {};
 
@@ -49,8 +152,14 @@ export function SubmitTaskForm({ userEmail }: SubmitTaskFormProps) {
     }
 
     setFieldErrors({});
-    setIsSubmitting(true);
     setSubmittedTask(null);
+
+    if (!userEmail) {
+      await redirectToLoginWithDraft();
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
       const formData = new FormData();
@@ -109,108 +218,98 @@ export function SubmitTaskForm({ userEmail }: SubmitTaskFormProps) {
       className="scroll-mt-16 px-4 pb-10 pt-20 sm:px-6 sm:pb-16 sm:pt-24"
     >
       <div className="mx-auto max-w-5xl">
-        {!userEmail ? (
-          <div className="rounded-[20px] bg-white/80 p-6 text-center shadow-[0_24px_80px_rgba(24,24,22,0.07)] ring-1 ring-black/[0.04] backdrop-blur sm:p-8">
-            <p className="text-sm font-medium text-[#6f7f62]">提交前先登录</p>
-            <h1 className="mx-auto mt-3 max-w-xl text-2xl font-semibold tracking-tight text-[#181816] sm:text-3xl">
-              登录后提交任务，之后随时回到我的任务查看进度和效果图
-            </h1>
-            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-neutral-500 sm:text-base">
-              这样客户离开等待页面后，再次登录也能看到之前提交的任务和后台回传的结果。
-            </p>
-            <div className="mt-6 flex justify-center">
-              <Link
-                href="/login?next=/"
-                className="inline-flex h-12 items-center justify-center rounded-xl bg-[#181816] px-7 text-sm font-semibold text-white shadow-[0_14px_32px_rgba(24,24,22,0.14)] transition hover:bg-[#2b2b28]"
-              >
-                登录 / 注册
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <div className="rounded-[20px] bg-white/80 p-3 shadow-[0_24px_80px_rgba(24,24,22,0.07)] ring-1 ring-black/[0.04] backdrop-blur sm:p-4">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-3 px-1 text-sm text-neutral-500">
+        <div className="rounded-[20px] bg-white/80 p-3 shadow-[0_24px_80px_rgba(24,24,22,0.07)] ring-1 ring-black/[0.04] backdrop-blur sm:p-4">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3 px-1 text-sm text-neutral-500">
+            {userEmail ? (
               <span>当前账号：{userEmail}</span>
+            ) : (
+              <span>填写完成后，提交时登录即可保存任务</span>
+            )}
+            {userEmail ? (
               <Link href="/my/tasks" className="font-medium text-[#6f7f62] transition hover:text-[#181816]">
                 查看我的任务
               </Link>
-            </div>
-            <div className="grid gap-3 lg:grid-cols-[1.05fr_0.95fr]">
-              <PhotoUpload
-                file={file}
-                previewUrl={previewUrl}
-                onFileChange={handleFileChange}
-              />
-
-              <div className="flex flex-col">
-                <label
-                  htmlFor="prompt"
-                  className="mb-3 block text-sm font-medium text-[#181816]"
-                >
-                  设计需求
-                </label>
-                <textarea
-                  id="prompt"
-                  rows={10}
-                  value={prompt}
-                  onChange={(e) => {
-                    setPrompt(e.target.value);
-                    if (e.target.value.trim()) {
-                      setFieldErrors((prev) => ({
-                        ...prev,
-                        prompt: undefined,
-                      }));
-                    }
-                  }}
-                  placeholder={PROMPT_PLACEHOLDER}
-                  aria-invalid={Boolean(fieldErrors.prompt)}
-                  className={
-                    "min-h-[260px] flex-1 resize-y rounded-2xl border px-4 py-4 text-sm leading-relaxed text-[#181816] placeholder:text-neutral-400 focus:outline-none focus:ring-2 sm:min-h-[360px] sm:text-base " +
-                    (fieldErrors.prompt
-                      ? "border-red-400 bg-red-50 ring-red-100 focus:border-red-400 focus:ring-red-100"
-                      : "border-black/[0.06] bg-[#fbfbf8] focus:border-[#7a8a6a] focus:bg-white focus:ring-[#dce5d3]")
-                  }
-                />
-                {fieldErrors.prompt && (
-                  <p className="mt-2 text-sm text-red-600" role="alert">
-                    {fieldErrors.prompt}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <button
-              type="button"
-              disabled={isSubmitting}
-              onClick={handleSubmit}
-              className={
-                "mt-3 flex h-[52px] w-full items-center justify-center gap-2 rounded-2xl text-sm font-semibold transition-all sm:h-14 " +
-                (isSubmitting
-                  ? "cursor-wait bg-neutral-200 text-neutral-500"
-                  : "bg-[#181816] text-white shadow-[0_14px_32px_rgba(24,24,22,0.16)] hover:bg-[#2b2b28] active:scale-[0.99]")
-              }
-            >
-              {isSubmitting && (
-                <span className="h-5 w-5 animate-spin rounded-full border-2 border-neutral-400 border-t-white" />
-              )}
-              {isSubmitting ? "提交中…" : "提交任务"}
-            </button>
-            {fieldErrors.submit && (
-              <p className="mt-3 text-center text-sm text-red-600" role="alert">
-                {fieldErrors.submit}
-              </p>
+            ) : (
+              <Link href="/login?next=/" className="font-medium text-[#6f7f62] transition hover:text-[#181816]">
+                登录 / 注册
+              </Link>
             )}
-            {submittedTask &&
-              (submittedTask.status === "completed" &&
-              submittedTask.result_image ? (
-                <div className="mt-4">
-                  <TaskCompletedView task={submittedTask} />
-                </div>
-              ) : (
-                <InlineWaitingIndicator task={submittedTask} />
-              ))}
           </div>
-        )}
+          <div className="grid gap-3 lg:grid-cols-[1.05fr_0.95fr]">
+            <PhotoUpload
+              file={file}
+              previewUrl={previewUrl}
+              onFileChange={handleFileChange}
+            />
+
+            <div className="flex flex-col">
+              <label
+                htmlFor="prompt"
+                className="mb-3 block text-sm font-medium text-[#181816]"
+              >
+                设计需求
+              </label>
+              <textarea
+                id="prompt"
+                rows={10}
+                value={prompt}
+                onChange={(e) => {
+                  setPrompt(e.target.value);
+                  if (e.target.value.trim()) {
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      prompt: undefined,
+                    }));
+                  }
+                }}
+                placeholder={PROMPT_PLACEHOLDER}
+                aria-invalid={Boolean(fieldErrors.prompt)}
+                className={
+                  "min-h-[260px] flex-1 resize-y rounded-2xl border px-4 py-4 text-sm leading-relaxed text-[#181816] placeholder:text-neutral-400 focus:outline-none focus:ring-2 sm:min-h-[360px] sm:text-base " +
+                  (fieldErrors.prompt
+                    ? "border-red-400 bg-red-50 ring-red-100 focus:border-red-400 focus:ring-red-100"
+                    : "border-black/[0.06] bg-[#fbfbf8] focus:border-[#7a8a6a] focus:bg-white focus:ring-[#dce5d3]")
+                }
+              />
+              {fieldErrors.prompt && (
+                <p className="mt-2 text-sm text-red-600" role="alert">
+                  {fieldErrors.prompt}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={handleSubmit}
+            className={
+              "mt-3 flex h-[52px] w-full items-center justify-center gap-2 rounded-2xl text-sm font-semibold transition-all sm:h-14 " +
+              (isSubmitting
+                ? "cursor-wait bg-neutral-200 text-neutral-500"
+                : "bg-[#181816] text-white shadow-[0_14px_32px_rgba(24,24,22,0.16)] hover:bg-[#2b2b28] active:scale-[0.99]")
+            }
+          >
+            {isSubmitting && (
+              <span className="h-5 w-5 animate-spin rounded-full border-2 border-neutral-400 border-t-white" />
+            )}
+            {isSubmitting ? "处理中…" : "提交任务"}
+          </button>
+          {fieldErrors.submit && (
+            <p className="mt-3 text-center text-sm text-red-600" role="alert">
+              {fieldErrors.submit}
+            </p>
+          )}
+          {submittedTask &&
+            (submittedTask.status === "completed" &&
+            submittedTask.result_image ? (
+              <div className="mt-4">
+                <TaskCompletedView task={submittedTask} />
+              </div>
+            ) : (
+              <InlineWaitingIndicator task={submittedTask} />
+            ))}
+        </div>
       </div>
     </section>
   );
