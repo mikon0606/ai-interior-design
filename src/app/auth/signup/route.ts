@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import { getPublicOrigin } from "@/lib/public-origin";
 import { getSupabaseAuthEnv } from "@/lib/supabase/auth-env";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -16,23 +17,29 @@ export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
-  const next = formData.get("next");
-  const destination = getSafeNext(next);
+  const confirmPassword = formData.get("confirmPassword");
+  const destination = getSafeNext(formData.get("next"));
+  const publicOrigin = getPublicOrigin(request);
 
-  const loginUrl = new URL("/login", request.url);
-  loginUrl.searchParams.set("next", destination);
+  const signupUrl = new URL("/signup", publicOrigin);
+  signupUrl.searchParams.set("next", destination);
 
   if (typeof email !== "string" || typeof password !== "string") {
-    loginUrl.searchParams.set("error", "请输入邮箱和密码");
-    return NextResponse.redirect(loginUrl, { status: 303 });
+    signupUrl.searchParams.set("error", "请输入邮箱和密码");
+    return NextResponse.redirect(signupUrl, { status: 303 });
   }
 
   if (password.length < 6) {
-    loginUrl.searchParams.set("error", "密码至少需要 6 位");
-    return NextResponse.redirect(loginUrl, { status: 303 });
+    signupUrl.searchParams.set("error", "密码至少需要 6 位");
+    return NextResponse.redirect(signupUrl, { status: 303 });
   }
 
-  let response = NextResponse.redirect(new URL(destination, request.url), {
+  if (confirmPassword !== password) {
+    signupUrl.searchParams.set("error", "两次输入的密码不一致");
+    return NextResponse.redirect(signupUrl, { status: 303 });
+  }
+
+  let response = NextResponse.redirect(new URL(destination, publicOrigin), {
     status: 303,
   });
 
@@ -46,7 +53,7 @@ export async function POST(request: NextRequest) {
         cookiesToSet.forEach(({ name, value }) => {
           request.cookies.set(name, value);
         });
-        response = NextResponse.redirect(new URL(destination, request.url), {
+        response = NextResponse.redirect(new URL(destination, publicOrigin), {
           status: 303,
         });
         cookiesToSet.forEach(({ name, value, options }) => {
@@ -59,24 +66,31 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  const origin = request.nextUrl.origin;
+  const confirmationUrl = new URL("/login", publicOrigin);
+  confirmationUrl.searchParams.set("message", "邮箱确认成功，请登录");
+  confirmationUrl.searchParams.set("next", destination);
   const { data, error } = await supabase.auth.signUp({
     email: email.trim(),
     password,
     options: {
-      emailRedirectTo: new URL("/auth/confirm?next=" + encodeURIComponent(destination), origin).toString(),
+      emailRedirectTo: confirmationUrl.toString(),
     },
   });
 
   if (error) {
-    loginUrl.searchParams.set("error", error.message || "注册失败，请稍后重试");
-    return NextResponse.redirect(loginUrl, { status: 303 });
+    signupUrl.searchParams.set(
+      "error",
+      error.code === "user_already_exists"
+        ? "该邮箱已注册；如未确认邮箱，请点击重发确认邮件"
+        : "注册失败，请稍后重试",
+    );
+    return NextResponse.redirect(signupUrl, { status: 303 });
   }
 
   if (data.session) {
     return response;
   }
 
-  loginUrl.searchParams.set("message", "注册成功，请检查邮箱完成确认");
-  return NextResponse.redirect(loginUrl, { status: 303 });
+  signupUrl.searchParams.set("message", "注册成功，请到邮箱点击确认链接");
+  return NextResponse.redirect(signupUrl, { status: 303 });
 }

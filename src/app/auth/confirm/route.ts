@@ -1,4 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
+import type { EmailOtpType } from "@supabase/supabase-js";
+import { getPublicOrigin } from "@/lib/public-origin";
 import { getSupabaseAuthEnv } from "@/lib/supabase/auth-env";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -16,8 +18,9 @@ export async function GET(request: NextRequest) {
   const tokenHash = request.nextUrl.searchParams.get("token_hash");
   const type = request.nextUrl.searchParams.get("type");
   const destination = getSafeNext(request.nextUrl.searchParams.get("next"));
+  const publicOrigin = getPublicOrigin(request);
 
-  const loginUrl = new URL("/login", request.url);
+  const loginUrl = new URL("/login", publicOrigin);
   loginUrl.searchParams.set("next", destination);
 
   if (!tokenHash || !type) {
@@ -25,7 +28,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  let response = NextResponse.redirect(new URL(destination, request.url));
+  let response = NextResponse.redirect(new URL(destination, publicOrigin));
   const { url, key } = getSupabaseAuthEnv();
   const supabase = createServerClient(url, key, {
     cookies: {
@@ -36,7 +39,7 @@ export async function GET(request: NextRequest) {
         cookiesToSet.forEach(({ name, value }) => {
           request.cookies.set(name, value);
         });
-        response = NextResponse.redirect(new URL(destination, request.url));
+        response = NextResponse.redirect(new URL(destination, publicOrigin));
         cookiesToSet.forEach(({ name, value, options }) => {
           response.cookies.set(name, value, options);
         });
@@ -49,7 +52,7 @@ export async function GET(request: NextRequest) {
 
   const { error } = await supabase.auth.verifyOtp({
     token_hash: tokenHash,
-    type: type as "email",
+    type: type as EmailOtpType,
   });
 
   if (error) {

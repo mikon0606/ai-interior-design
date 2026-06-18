@@ -1,9 +1,9 @@
-import { LoginForm } from "@/app/login/LoginForm";
+import { SignupForm } from "@/app/signup/SignupForm";
 import { getAuthClaims } from "@/lib/auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-type LoginPageProps = {
+type SignupPageProps = {
   searchParams: Promise<{
     error?: string;
     message?: string;
@@ -13,25 +13,21 @@ type LoginPageProps = {
 
 export const dynamic = "force-dynamic";
 
-function getSafeFormNext(next?: string) {
+function getSafeNext(next?: string) {
   if (!next || !next.startsWith("/") || next.startsWith("//")) {
     return "/my/tasks";
   }
 
-  return next;
+  return next.startsWith("/admin") ? "/my/tasks" : next;
 }
 
-function getLoggedInRedirect(nextPath: string) {
-  return nextPath.startsWith("/admin") ? "/my/tasks" : nextPath;
-}
-
-export default async function LoginPage({ searchParams }: LoginPageProps) {
+export default async function SignupPage({ searchParams }: SignupPageProps) {
   const params = await searchParams;
-  const nextPath = getSafeFormNext(params.next);
+  const nextPath = getSafeNext(params.next);
   const claims = await getAuthClaims();
 
   if (claims) {
-    redirect(getLoggedInRedirect(nextPath));
+    redirect(nextPath);
   }
 
   return (
@@ -46,11 +42,11 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               AI装修大师
             </Link>
             <h1 className="mt-8 text-2xl font-semibold tracking-tight">
-              登录
+              注册
             </h1>
           </div>
 
-          <LoginForm
+          <SignupForm
             error={params.error}
             message={params.message}
             nextPath={nextPath}

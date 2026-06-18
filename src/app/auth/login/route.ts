@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import { getPublicOrigin } from "@/lib/public-origin";
 import { getSupabaseAuthEnv } from "@/lib/supabase/auth-env";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -16,10 +17,10 @@ export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
-  const next = formData.get("next");
-  const destination = getSafeNext(next);
+  const destination = getSafeNext(formData.get("next"));
+  const publicOrigin = getPublicOrigin(request);
 
-  const loginUrl = new URL("/login", request.url);
+  const loginUrl = new URL("/login", publicOrigin);
   loginUrl.searchParams.set("next", destination);
 
   if (typeof email !== "string" || typeof password !== "string") {
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.redirect(loginUrl, { status: 303 });
   }
 
-  let response = NextResponse.redirect(new URL(destination, request.url), {
+  let response = NextResponse.redirect(new URL(destination, publicOrigin), {
     status: 303,
   });
 
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
         cookiesToSet.forEach(({ name, value }) => {
           request.cookies.set(name, value);
         });
-        response = NextResponse.redirect(new URL(destination, request.url), {
+        response = NextResponse.redirect(new URL(destination, publicOrigin), {
           status: 303,
         });
         cookiesToSet.forEach(({ name, value, options }) => {
@@ -60,6 +61,16 @@ export async function POST(request: NextRequest) {
   });
 
   if (error) {
+    if (error.code === "email_not_confirmed") {
+      const signupUrl = new URL("/signup", publicOrigin);
+      signupUrl.searchParams.set("next", destination);
+      signupUrl.searchParams.set(
+        "error",
+        "邮箱尚未确认，请先点击确认邮件；未收到可在这里重发",
+      );
+      return NextResponse.redirect(signupUrl, { status: 303 });
+    }
+
     loginUrl.searchParams.set("error", "邮箱或密码不正确");
     return NextResponse.redirect(loginUrl, { status: 303 });
   }
