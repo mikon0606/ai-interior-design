@@ -31,32 +31,61 @@ export default async function ShowcaseDetailPage({
             返回首页
           </Link>
 
-          <div className="overflow-hidden rounded-lg bg-white shadow-[0_24px_80px_rgba(24,24,22,0.08)] ring-1 ring-black/[0.04]">
-            <div className="relative aspect-[16/10] bg-neutral-100">
-              <Image
-                src={item.src}
-                alt={item.title}
-                fill
-                sizes="(min-width: 1024px) 960px, 100vw"
-                className="object-cover"
-                priority
+          <div className="rounded-lg bg-white p-4 shadow-[0_24px_80px_rgba(24,24,22,0.08)] ring-1 ring-black/[0.04] sm:p-5">
+            <h1 className="mb-5 px-1 text-2xl font-semibold tracking-normal sm:text-3xl">
+              {item.title}
+            </h1>
+
+            <div className="grid gap-4 lg:grid-cols-2">
+              <DetailImage
+                src={item.originalSrc}
+                alt={item.title + item.originalLabel}
+                label={item.originalLabel}
+              />
+              <DetailImage
+                src={item.resultSrc}
+                alt={item.title + item.resultLabel}
+                label={item.resultLabel}
               />
             </div>
-            <div className="p-5 sm:p-6">
-              <h1 className="text-2xl font-semibold tracking-normal sm:text-3xl">
-                {item.title}
-              </h1>
 
-              <div className="mt-6">
-                <h2 className="text-sm font-medium text-neutral-500">提示词</h2>
-                <p className="mt-3 rounded-lg bg-[#f6f6f3] p-4 text-sm leading-7 text-[#2b2b28] ring-1 ring-black/[0.04]">
-                  {item.prompt}
-                </p>
-              </div>
+            <div className="p-5 sm:p-6">
+              <h2 className="text-sm font-medium text-neutral-500">提示词</h2>
+              <p className="mt-3 rounded-lg bg-[#f6f6f3] p-4 text-sm leading-7 text-[#2b2b28] ring-1 ring-black/[0.04]">
+                {item.prompt}
+              </p>
             </div>
           </div>
         </div>
       </main>
     </div>
+  );
+}
+
+function DetailImage({
+  src,
+  alt,
+  label,
+}: {
+  src: string;
+  alt: string;
+  label: string;
+}) {
+  return (
+    <figure>
+      <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-neutral-100">
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="(min-width: 1024px) 480px, 100vw"
+          className="object-cover"
+          priority
+        />
+      </div>
+      <figcaption className="mt-2 px-1 text-sm font-medium text-neutral-500">
+        {label}
+      </figcaption>
+    </figure>
   );
 }

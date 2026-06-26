@@ -45,14 +45,18 @@ function ShowcaseSection() {
               href={"/showcase/" + item.slug}
               className="group overflow-hidden rounded-lg bg-white shadow-[0_18px_50px_rgba(24,24,22,0.06)] ring-1 ring-black/[0.04] transition hover:-translate-y-0.5 hover:shadow-[0_24px_60px_rgba(24,24,22,0.1)]"
             >
-              <div className="relative aspect-[16/10] bg-neutral-100">
-                <Image
-                  src={item.src}
-                  alt={item.title}
-                  fill
-                  sizes="(min-width: 1024px) 480px, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                  priority={item.src === showcaseCases[0].src}
+              <div className="grid grid-cols-2 gap-px bg-neutral-200">
+                <CaseImage
+                  src={item.originalSrc}
+                  alt={item.title + item.originalLabel}
+                  label={item.originalLabel}
+                  priority={item.slug === showcaseCases[0].slug}
+                />
+                <CaseImage
+                  src={item.resultSrc}
+                  alt={item.title + item.resultLabel}
+                  label={item.resultLabel}
+                  priority={item.slug === showcaseCases[0].slug}
                 />
               </div>
               <h3 className="px-4 py-3 text-sm font-medium text-[#181816]">
@@ -63,5 +67,33 @@ function ShowcaseSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+function CaseImage({
+  src,
+  alt,
+  label,
+  priority,
+}: {
+  src: string;
+  alt: string;
+  label: string;
+  priority: boolean;
+}) {
+  return (
+    <div className="relative aspect-[4/3] bg-neutral-100">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(min-width: 1024px) 240px, (min-width: 640px) 25vw, 50vw"
+        className="object-cover transition duration-500 group-hover:scale-[1.03]"
+        priority={priority}
+      />
+      <span className="absolute left-2 top-2 rounded bg-white/90 px-2 py-1 text-[11px] font-medium text-[#181816] shadow-sm">
+        {label}
+      </span>
+    </div>
   );
 }
