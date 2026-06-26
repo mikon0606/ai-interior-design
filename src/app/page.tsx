@@ -1,32 +1,11 @@
 import { SubmitTaskForm } from "@/components/SubmitTaskForm";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getAuthClaims } from "@/lib/auth";
+import { showcaseCases } from "@/lib/showcase-cases";
 import Image from "next/image";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
-
-const showcaseItems = [
-  {
-    title: "现代极简客厅",
-    note: "适合客户沟通的空间氛围提案",
-    src: "/showcase/living-room-minimal.png",
-  },
-  {
-    title: "轻奢主卧",
-    note: "材质、灯光和软装方向预览",
-    src: "/showcase/master-bedroom-luxe.png",
-  },
-  {
-    title: "奶油风餐厨",
-    note: "开放式餐厨布局效果参考",
-    src: "/showcase/kitchen-dining-cream.png",
-  },
-  {
-    title: "日式卫浴",
-    note: "卫浴干湿分区和氛围提案",
-    src: "/showcase/spa-bathroom-japanese.png",
-  },
-];
 
 export default async function Home() {
   const claims = await getAuthClaims();
@@ -55,22 +34,16 @@ function ShowcaseSection() {
   return (
     <section className="px-4 pb-16 sm:px-6 sm:pb-20">
       <div className="mx-auto max-w-5xl">
-        <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="text-xl font-semibold tracking-normal text-[#181816] sm:text-2xl">
-              可用于客户沟通的提案效果图
-            </h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-500">
-              围绕室内设计师的真实沟通场景，先展示空间风格、材质和布局方向。
-            </p>
-          </div>
-        </div>
+        <h2 className="mb-5 text-xl font-semibold tracking-normal text-[#181816] sm:text-2xl">
+          效果图案例
+        </h2>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {showcaseItems.map((item) => (
-            <article
-              key={item.src}
-              className="overflow-hidden rounded-lg bg-white shadow-[0_18px_50px_rgba(24,24,22,0.06)] ring-1 ring-black/[0.04]"
+          {showcaseCases.map((item) => (
+            <Link
+              key={item.slug}
+              href={"/showcase/" + item.slug}
+              className="group overflow-hidden rounded-lg bg-white shadow-[0_18px_50px_rgba(24,24,22,0.06)] ring-1 ring-black/[0.04] transition hover:-translate-y-0.5 hover:shadow-[0_24px_60px_rgba(24,24,22,0.1)]"
             >
               <div className="relative aspect-[16/10] bg-neutral-100">
                 <Image
@@ -78,19 +51,14 @@ function ShowcaseSection() {
                   alt={item.title}
                   fill
                   sizes="(min-width: 1024px) 480px, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover"
-                  priority={item.src === showcaseItems[0].src}
+                  className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                  priority={item.src === showcaseCases[0].src}
                 />
               </div>
-              <div className="flex items-center justify-between gap-3 px-4 py-3">
-                <h3 className="text-sm font-medium text-[#181816]">
-                  {item.title}
-                </h3>
-                <p className="text-right text-xs text-neutral-500">
-                  {item.note}
-                </p>
-              </div>
-            </article>
+              <h3 className="px-4 py-3 text-sm font-medium text-[#181816]">
+                {item.title}
+              </h3>
+            </Link>
           ))}
         </div>
       </div>
