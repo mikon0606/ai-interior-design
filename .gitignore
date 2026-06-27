@@ -38,9 +38,18 @@ yarn-error.log*
 # vercel
 .vercel
 
+# cloudflare
+.open-next/
+.wrangler/
+
 # typescript
 *.tsbuildinfo
 
 # 本地数据（已迁移至 Supabase）
 /data/
 /public/uploads/
+
+# Tencent Cloud EdgeOne
+.env
+.edgeone/*
+.tef_dist/*
