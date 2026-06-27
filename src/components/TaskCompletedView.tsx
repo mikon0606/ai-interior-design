@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ImagePreviewDialog } from "@/components/ImagePreviewDialog";
 import type { Task } from "@/lib/task-types";
 
 interface TaskCompletedViewProps {
@@ -65,15 +65,13 @@ function ImagePanel({
           {label}
         </span>
       </div>
-      <div className="relative aspect-[4/3] w-full bg-[#f1f1ed] sm:aspect-[16/10]">
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
-      </div>
+      <ImagePreviewDialog
+        src={src}
+        alt={alt}
+        label={label}
+        previewClassName="relative aspect-[4/3] w-full bg-[#f1f1ed] sm:aspect-[16/10]"
+        sizes="(max-width: 768px) 100vw, 50vw"
+      />
     </div>
   );
 }

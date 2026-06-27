@@ -1,9 +1,9 @@
+import { ImagePreviewDialog } from "@/components/ImagePreviewDialog";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TaskStatusBadge } from "@/components/TaskStatusBadge";
 import { getAuthClaims } from "@/lib/auth";
 import { formatDateTime } from "@/lib/format";
 import { listTasksByUser } from "@/lib/tasks";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -60,18 +60,17 @@ export default async function MyTasksPage() {
                 const imageUrl = task.result_image ?? task.input_image;
 
                 return (
-                  <Link
+                  <article
                     key={task.id}
-                    href={"/task/" + task.task_number}
                     className="group overflow-hidden rounded-[20px] bg-white/82 shadow-[0_18px_60px_rgba(24,24,22,0.06)] ring-1 ring-black/[0.04] transition hover:-translate-y-0.5 hover:shadow-[0_24px_80px_rgba(24,24,22,0.09)]"
                   >
                     <div className="relative aspect-[4/3] bg-[#eeeee8]">
                       {imageUrl ? (
-                        <Image
+                        <ImagePreviewDialog
                           src={imageUrl}
                           alt={task.task_number + " 任务图片"}
-                          fill
-                          className="object-cover transition duration-300 group-hover:scale-[1.02]"
+                          label={task.task_number + " 任务图片"}
+                          previewClassName="relative aspect-[4/3] w-full bg-[#eeeee8]"
                           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                         />
                       ) : (
@@ -92,12 +91,15 @@ export default async function MyTasksPage() {
                       </p>
                       <div className="mt-5 flex items-center justify-between text-xs text-neutral-500">
                         <span>{formatDateTime(task.created_at)}</span>
-                        <span className="font-medium text-[#6f7f62] group-hover:text-[#181816]">
+                        <Link
+                          href={"/task/" + task.task_number}
+                          className="font-medium text-[#6f7f62] transition hover:text-[#181816]"
+                        >
                           查看详情
-                        </span>
+                        </Link>
                       </div>
                     </div>
-                  </Link>
+                  </article>
                 );
               })}
             </div>
