@@ -71,11 +71,11 @@ export function ImagePreviewDialog({
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
-          className="fixed inset-0 z-50 bg-black/82 px-3 py-4 backdrop-blur-sm sm:px-6 sm:py-8"
+          className="fixed inset-0 z-[999] flex h-[100dvh] w-screen flex-col bg-black/90 px-3 py-3 backdrop-blur-sm sm:px-6 sm:py-5"
           onClick={() => setIsOpen(false)}
         >
           <div
-            className="mx-auto flex h-full max-w-6xl flex-col gap-3"
+            className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col gap-3"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between gap-4 text-white">
@@ -91,16 +91,13 @@ export function ImagePreviewDialog({
               </button>
             </div>
 
-            <div
-              className="relative min-h-0 flex-1 overflow-hidden rounded-2xl bg-black/30 ring-1 ring-white/12"
-            >
-              <Image
+            <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-2xl bg-black/30 ring-1 ring-white/12">
+              {/* Use a plain img so the preview always preserves the full source aspect ratio inside the viewport. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={src}
                 alt={alt}
-                fill
-                className="object-contain"
-                sizes="100vw"
-                priority
+                className="block max-h-full max-w-full object-contain"
               />
             </div>
           </div>
