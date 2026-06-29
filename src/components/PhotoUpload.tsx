@@ -88,7 +88,7 @@ export function PhotoUpload({
                 : "border-[#211d1a]/12 bg-[#f5efe5] hover:border-[#c66f51]/70 hover:bg-[#fffaf1]"
           }`}
         >
-          <span className="font-display flex h-16 w-16 items-center justify-center rounded-full border border-[#c66f51]/55 bg-[#faf7ef] text-4xl leading-none text-[#c66f51]">
+          <span className="flex h-16 w-16 items-center justify-center rounded-full border border-[#c66f51]/55 bg-[#faf7ef] text-4xl font-bold leading-none text-[#c66f51]">
             +
           </span>
           <p className="mt-5 text-center text-sm font-semibold text-[#211d1a]">

@@ -217,50 +217,9 @@ export function SubmitTaskForm({ userEmail }: SubmitTaskFormProps) {
       id="submit"
       className="scroll-mt-16 px-4 pb-12 pt-24 sm:px-6 sm:pb-18 sm:pt-28"
     >
-      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-        <div className="pt-2 lg:sticky lg:top-28">
-          <p className="font-sans mb-5 text-[12px] font-bold uppercase tracking-[0.18em] text-[#c66f51]">
-            AI Interior Proposal
-          </p>
-          <h1 className="font-display max-w-[9em] text-6xl font-semibold leading-[0.95] tracking-normal text-[#211d1a] sm:text-7xl lg:text-8xl">
-            客户提案图
-          </h1>
-          <div className="mt-8 max-w-md space-y-4 text-lg leading-9 text-[#786f66]">
-            <p>上传房间照片，写下需求。</p>
-            <p>后台人工生成效果图，适合设计师快速推进沟通。</p>
-          </div>
-          <div className="mt-10 flex items-center gap-5 border-t border-[#211d1a]/18 pt-5">
-            <div className="text-center">
-              <p className="font-display flex h-16 w-16 items-center justify-center rounded-full border border-[#c66f51]/55 text-4xl leading-none text-[#211d1a]">
-                传
-              </p>
-              <p className="font-sans mt-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#786f66]">
-                Upload
-              </p>
-            </div>
-            <div className="h-px flex-1 bg-[#c66f51]/45" />
-            <div className="text-center">
-              <p className="font-display flex h-16 w-16 items-center justify-center rounded-full border border-[#c66f51]/55 text-4xl leading-none text-[#211d1a]">
-                写
-              </p>
-              <p className="font-sans mt-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#786f66]">
-                Brief
-              </p>
-            </div>
-            <div className="h-px flex-1 bg-[#c66f51]/45" />
-            <div className="text-center">
-              <p className="font-display flex h-16 w-16 items-center justify-center rounded-full border border-[#c66f51]/55 text-4xl leading-none text-[#211d1a]">
-                回
-              </p>
-              <p className="font-sans mt-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#786f66]">
-                Result
-              </p>
-            </div>
-          </div>
-        </div>
-
+      <div className="mx-auto max-w-5xl">
         <div className="border border-[#211d1a]/12 bg-[#faf7ef]/72 p-3 shadow-[0_30px_80px_rgba(33,29,26,0.08)] backdrop-blur sm:p-4">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#211d1a]/12 px-1 pb-4 text-sm text-[#786f66]">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#211d1a]/12 px-1 pb-4 text-sm font-semibold tracking-[0.08em] text-[#786f66]">
             {userEmail ? (
               <span>当前账号：{userEmail}</span>
             ) : (

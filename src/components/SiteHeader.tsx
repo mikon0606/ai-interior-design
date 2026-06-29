@@ -27,7 +27,7 @@ export function SiteHeader({
         <Link
           href="/"
           className={
-            "font-display shrink-0 text-2xl font-semibold tracking-normal sm:text-3xl " +
+            "shrink-0 text-sm font-extrabold uppercase tracking-[0.16em] sm:text-base " +
             (isDark ? "text-white" : "text-[#211d1a]")
           }
         >

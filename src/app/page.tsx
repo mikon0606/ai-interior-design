@@ -35,7 +35,7 @@ function ShowcaseSection() {
     <section className="px-4 pb-16 sm:px-6 sm:pb-20">
       <div className="mx-auto max-w-7xl border-t border-[#211d1a]/18 pt-8">
         <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <h2 className="font-display text-4xl font-semibold leading-none tracking-normal text-[#211d1a] sm:text-5xl">
+          <h2 className="text-2xl font-extrabold uppercase leading-none tracking-[0.14em] text-[#211d1a] sm:text-3xl">
             效果图案例
           </h2>
           <p className="max-w-md text-sm leading-7 text-[#786f66]">
