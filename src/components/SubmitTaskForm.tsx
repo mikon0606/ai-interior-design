@@ -215,27 +215,74 @@ export function SubmitTaskForm({ userEmail }: SubmitTaskFormProps) {
   return (
     <section
       id="submit"
-      className="scroll-mt-16 px-4 pb-10 pt-20 sm:px-6 sm:pb-16 sm:pt-24"
+      className="scroll-mt-16 px-4 pb-12 pt-24 sm:px-6 sm:pb-18 sm:pt-28"
     >
-      <div className="mx-auto max-w-5xl">
-        <div className="rounded-[20px] bg-white/80 p-3 shadow-[0_24px_80px_rgba(24,24,22,0.07)] ring-1 ring-black/[0.04] backdrop-blur sm:p-4">
-          <div className="mb-3 flex flex-wrap items-center justify-between gap-3 px-1 text-sm text-neutral-500">
+      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <div className="pt-2 lg:sticky lg:top-28">
+          <p className="font-sans mb-5 text-[12px] font-bold uppercase tracking-[0.18em] text-[#c66f51]">
+            AI Interior Proposal
+          </p>
+          <h1 className="font-display max-w-[9em] text-6xl font-semibold leading-[0.95] tracking-normal text-[#211d1a] sm:text-7xl lg:text-8xl">
+            客户提案图
+          </h1>
+          <div className="mt-8 max-w-md space-y-4 text-lg leading-9 text-[#786f66]">
+            <p>上传房间照片，写下需求。</p>
+            <p>后台人工生成效果图，适合设计师快速推进沟通。</p>
+          </div>
+          <div className="mt-10 flex items-center gap-5 border-t border-[#211d1a]/18 pt-5">
+            <div className="text-center">
+              <p className="font-display flex h-16 w-16 items-center justify-center rounded-full border border-[#c66f51]/55 text-4xl leading-none text-[#211d1a]">
+                传
+              </p>
+              <p className="font-sans mt-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#786f66]">
+                Upload
+              </p>
+            </div>
+            <div className="h-px flex-1 bg-[#c66f51]/45" />
+            <div className="text-center">
+              <p className="font-display flex h-16 w-16 items-center justify-center rounded-full border border-[#c66f51]/55 text-4xl leading-none text-[#211d1a]">
+                写
+              </p>
+              <p className="font-sans mt-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#786f66]">
+                Brief
+              </p>
+            </div>
+            <div className="h-px flex-1 bg-[#c66f51]/45" />
+            <div className="text-center">
+              <p className="font-display flex h-16 w-16 items-center justify-center rounded-full border border-[#c66f51]/55 text-4xl leading-none text-[#211d1a]">
+                回
+              </p>
+              <p className="font-sans mt-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#786f66]">
+                Result
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="border border-[#211d1a]/12 bg-[#faf7ef]/72 p-3 shadow-[0_30px_80px_rgba(33,29,26,0.08)] backdrop-blur sm:p-4">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#211d1a]/12 px-1 pb-4 text-sm text-[#786f66]">
             {userEmail ? (
               <span>当前账号：{userEmail}</span>
             ) : (
               <span>填写完成后，提交时登录即可保存任务</span>
             )}
             {userEmail ? (
-              <Link href="/my/tasks" className="font-medium text-[#6f7f62] transition hover:text-[#181816]">
-                查看我的任务
+              <Link
+                href="/my/tasks"
+                className="font-sans text-[12px] font-bold uppercase tracking-[0.14em] text-[#c66f51] transition hover:text-[#211d1a]"
+              >
+                查看任务
               </Link>
             ) : (
-              <Link href="/login?next=/" className="font-medium text-[#6f7f62] transition hover:text-[#181816]">
+              <Link
+                href="/login?next=/"
+                className="font-sans text-[12px] font-bold uppercase tracking-[0.14em] text-[#c66f51] transition hover:text-[#211d1a]"
+              >
                 登录 / 注册
               </Link>
             )}
           </div>
-          <div className="grid gap-3 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
             <PhotoUpload
               file={file}
               previewUrl={previewUrl}
@@ -245,7 +292,7 @@ export function SubmitTaskForm({ userEmail }: SubmitTaskFormProps) {
             <div className="flex flex-col">
               <label
                 htmlFor="prompt"
-                className="mb-3 block text-sm font-medium text-[#181816]"
+                className="mb-3 block text-sm font-semibold text-[#211d1a]"
               >
                 设计需求
               </label>
@@ -265,10 +312,10 @@ export function SubmitTaskForm({ userEmail }: SubmitTaskFormProps) {
                 placeholder={PROMPT_PLACEHOLDER}
                 aria-invalid={Boolean(fieldErrors.prompt)}
                 className={
-                  "min-h-[260px] flex-1 resize-y rounded-2xl border px-4 py-4 text-sm leading-relaxed text-[#181816] placeholder:text-neutral-400 focus:outline-none focus:ring-2 sm:min-h-[360px] sm:text-base " +
+                  "min-h-[260px] flex-1 resize-y border px-4 py-4 text-sm leading-relaxed text-[#211d1a] placeholder:text-[#9a8f84] focus:outline-none focus:ring-2 sm:min-h-[360px] sm:text-base " +
                   (fieldErrors.prompt
                     ? "border-red-400 bg-red-50 ring-red-100 focus:border-red-400 focus:ring-red-100"
-                    : "border-black/[0.06] bg-[#fbfbf8] focus:border-[#7a8a6a] focus:bg-white focus:ring-[#dce5d3]")
+                    : "border-[#211d1a]/12 bg-[#f5efe5] focus:border-[#c66f51] focus:bg-[#fffaf1] focus:ring-[#e6c6b9]")
                 }
               />
               {fieldErrors.prompt && (
@@ -284,16 +331,16 @@ export function SubmitTaskForm({ userEmail }: SubmitTaskFormProps) {
             disabled={isSubmitting}
             onClick={handleSubmit}
             className={
-              "mt-3 flex h-[52px] w-full items-center justify-center gap-2 rounded-2xl text-sm font-semibold transition-all sm:h-14 " +
+              "font-sans mt-4 flex h-[52px] w-full items-center justify-center gap-2 border text-[12px] font-bold uppercase tracking-[0.16em] transition-all sm:h-14 " +
               (isSubmitting
-                ? "cursor-wait bg-neutral-200 text-neutral-500"
-                : "bg-[#181816] text-white shadow-[0_14px_32px_rgba(24,24,22,0.16)] hover:bg-[#2b2b28] active:scale-[0.99]")
+                ? "cursor-wait border-[#cfc4b8] bg-[#e5ded3] text-[#786f66]"
+                : "border-[#211d1a] bg-[#211d1a] text-[#f7f1e8] shadow-[0_14px_32px_rgba(33,29,26,0.16)] hover:bg-[#332c26] active:scale-[0.99]")
             }
           >
             {isSubmitting && (
-              <span className="h-5 w-5 animate-spin rounded-full border-2 border-neutral-400 border-t-white" />
+              <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#9a8f84] border-t-[#211d1a]" />
             )}
-            {isSubmitting ? "处理中…" : "提交任务"}
+            {isSubmitting ? "处理中" : "提交任务"}
           </button>
           {fieldErrors.submit && (
             <p className="mt-3 text-center text-sm text-red-600" role="alert">
@@ -317,18 +364,18 @@ export function SubmitTaskForm({ userEmail }: SubmitTaskFormProps) {
 
 function InlineWaitingIndicator({ task }: { task: Task }) {
   return (
-    <div className="mt-3 flex flex-wrap items-center justify-center gap-3 text-sm text-neutral-500">
-      <span className="h-4 w-4 animate-spin rounded-full border-2 border-neutral-300 border-t-[#181816]" />
-      <span>已提交，等待处理中 · {task.task_number}</span>
+    <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-sm text-[#786f66]">
+      <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#d7cec3] border-t-[#c66f51]" />
+      <span>已提交，任务号 {task.task_number}</span>
       <Link
         href={"/task/" + task.task_number}
-        className="font-medium text-[#6f7f62] transition hover:text-[#181816]"
+        className="font-sans text-[12px] font-bold uppercase tracking-[0.14em] text-[#c66f51] transition hover:text-[#211d1a]"
       >
         打开任务页
       </Link>
       <Link
         href="/my/tasks"
-        className="font-medium text-[#6f7f62] transition hover:text-[#181816]"
+        className="font-sans text-[12px] font-bold uppercase tracking-[0.14em] text-[#c66f51] transition hover:text-[#211d1a]"
       >
         我的任务
       </Link>

@@ -60,8 +60,10 @@ export function PhotoUpload({
   return (
     <div className="w-full">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <h3 className="text-sm font-medium text-[#181816]">上传照片</h3>
-        <span className="text-xs text-neutral-500">可选</span>
+        <h3 className="text-sm font-semibold text-[#211d1a]">上传照片</h3>
+        <span className="font-sans text-[10px] font-bold uppercase tracking-[0.16em] text-[#c66f51]">
+          可选
+        </span>
       </div>
 
       {!previewUrl ? (
@@ -78,27 +80,27 @@ export function PhotoUpload({
           }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={onDrop}
-          className={`flex min-h-[260px] cursor-pointer flex-col items-center justify-center rounded-2xl border px-6 py-12 transition-all sm:min-h-[360px] ${errorBorder} ${
+          className={`flex min-h-[260px] cursor-pointer flex-col items-center justify-center border px-6 py-12 transition-all sm:min-h-[360px] ${errorBorder} ${
             isDragging
-              ? "border-[#7a8a6a] bg-white shadow-[inset_0_0_0_1px_rgba(122,138,106,0.22)]"
+              ? "border-[#c66f51] bg-[#fffaf1] shadow-[inset_0_0_0_1px_rgba(198,111,81,0.22)]"
               : hasError
                 ? "border-red-400 bg-red-50"
-                : "border-black/[0.06] bg-[#fbfbf8] hover:border-[#7a8a6a]/60 hover:bg-white"
+                : "border-[#211d1a]/12 bg-[#f5efe5] hover:border-[#c66f51]/70 hover:bg-[#fffaf1]"
           }`}
         >
-          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#7a8a6a] shadow-[0_10px_30px_rgba(24,24,22,0.06)] ring-1 ring-black/[0.04]">
-            <UploadIcon />
+          <span className="font-display flex h-16 w-16 items-center justify-center rounded-full border border-[#c66f51]/55 bg-[#faf7ef] text-4xl leading-none text-[#c66f51]">
+            +
           </span>
-          <p className="mt-4 text-center text-sm font-medium text-[#181816]">
+          <p className="mt-5 text-center text-sm font-semibold text-[#211d1a]">
             点击上传照片
           </p>
-          <p className="mt-1.5 text-center text-xs text-neutral-500">
+          <p className="mt-1.5 text-center text-xs text-[#786f66]">
             也可只填写文字需求
           </p>
         </div>
       ) : (
         <div
-          className={`overflow-hidden rounded-2xl border bg-white ${errorBorder || "border-black/[0.06]"}`}
+          className={`overflow-hidden border bg-[#faf7ef] ${errorBorder || "border-[#211d1a]/12"}`}
         >
           <div className="relative aspect-[16/10] w-full">
             <Image
@@ -110,21 +112,21 @@ export function PhotoUpload({
             />
           </div>
           <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
-            <p className="truncate text-sm text-neutral-600">
+            <p className="truncate text-sm text-[#786f66]">
               {file?.name ?? "已选择照片"}
             </p>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
-                className="rounded-full bg-neutral-100 px-3 py-1.5 text-sm text-neutral-700 transition hover:bg-neutral-200"
+                className="font-sans border border-[#211d1a]/14 bg-[#f5efe5] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[#4f4740] transition hover:border-[#c66f51]/60 hover:text-[#211d1a]"
               >
                 更换
               </button>
               <button
                 type="button"
                 onClick={clearPhoto}
-                className="rounded-full bg-red-50 px-3 py-1.5 text-sm text-red-600 transition hover:bg-red-100"
+                className="font-sans border border-red-200 bg-red-50 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-red-600 transition hover:bg-red-100"
               >
                 移除
               </button>
@@ -147,24 +149,5 @@ export function PhotoUpload({
         onChange={(e) => handleFile(e.target.files?.[0])}
       />
     </div>
-  );
-}
-
-function UploadIcon() {
-  return (
-    <svg
-      className="h-7 w-7"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      aria-hidden
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-      />
-    </svg>
   );
 }
